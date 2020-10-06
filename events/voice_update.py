@@ -101,7 +101,8 @@ class VoiceUpdate(commands.Cog):
         try:
             global waiting_list
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-
+                if before.channel.name in server_dict.keys():
+                    
                 waiting_create.append(member.name)
                 if waiting_create[0] != member.name:
                     await asyncio.sleep(waiting_create.index(member.name)*5)
@@ -161,39 +162,42 @@ class VoiceUpdate(commands.Cog):
         except: pass
         
         #quitté un serveur
-        role_serv = None
-        host = False
-        if before.channel.name in server_dict.keys(): role_serv = discord.utils.get(member.guild.roles, name = before.channel.name.capitalize())
-        if "Hote" in member.roles: host = True
-        
-        voice = discord.utils.get(member.guild.channels, name = role_serv.name.capitalize())
-        text = discord.utils.get(member.guild.channels, name = role_serv.name.lower())
+        try:
+          role_serv = None
+          host = False
+          if before.channel.name in server_dict.keys(): role_serv = discord.utils.get(member.guild.roles, name = before.channel.name.capitalize())
+          if servers.count_documents({'voice_name': before.channel.name.capitalize(), 'finished': None, 'host_name': member.name}) > 0:  host = True
 
-        if (after.channel is None) or (after.channel.name != role_serv.name):
-            role_host = discord.utils.get(member.guild.roles, name = "Hote")
+          voice = discord.utils.get(member.guild.channels, name = role_serv.name.capitalize())
+          text = discord.utils.get(member.guild.channels, name = role_serv.name.lower())
 
-            if host and len(voice.members) > 0:
-                new_host = voice.members[randrange(len(voice.members))]
-                await new_host.add_roles(role_host)
-                servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'host_name': new_host.name, 'host_id': new_host.id}})
-                await logs.send(f"🟢 Le joueur {new_host.mention} a été designer par défaut comme nouvel hôte du serveur {role_serv.name}.")
-                await text.send(embed = discord.Embed(title = f"ℹ️ Serveur {text.name.capitalize()}", description = f"Le joueur {new_host.mention} à été designer par défaut comme nouvel hôte du serveur {text.name.capitalize()}.", color = 0x26f752))
-            await member.remove_roles(role_serv)
-            await member.remove_roles(role_host)
-            await logs.send(f"🔴 Le joueur {member.mention} a quitté le serveur {role_serv.name}.")
-            servers.update_one({'voice_name': role_serv.name, 'finished': None}, {'$pull': {'current_players': member.id}})
+          if (after.channel is None) or (after.channel.name != role_serv.name):
+              role_host = discord.utils.get(member.guild.roles, name = "Hote")
 
-        if (after.channel is None) or (after.channel.name != role_serv.name):
-            if len(voice.members) == 0:
-                text = discord.utils.get(member.guild.channels, name = role_serv.name.lower())
-                role = discord.utils.get(member.guild.roles, name = role_serv.name)            
-                role_host = discord.utils.get(member.guild.roles, name = "Hote")
-                servers.update_one({'voice_name': role_serv.name, 'finished': None}, {"$set": {"finished": int(time.time())}})
-                await voice.delete()
-                await text.delete()
-                await role.delete()
-                await member.remove_roles(role_host)
-                await logs.send(f"🔴 Le serveur {voice.name} a été supprimé.")
+              if host and len(voice.members) > 0:
+                  new_host = voice.members[randrange(len(voice.members))]
+                  await new_host.add_roles(role_host)
+                  servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'host_name': new_host.name, 'host_id': new_host.id}})
+                  await logs.send(f"🟢 Le joueur {new_host.mention} a été designer par défaut comme nouvel hôte du serveur {role_serv.name}.")
+                  await text.send(embed = discord.Embed(title = f"ℹ️ Serveur {text.name.capitalize()}", description = f"Le joueur {new_host.mention} à été designer par défaut comme nouvel hôte du serveur {text.name.capitalize()}.", color = 0x26f752))
+              await member.remove_roles(role_serv)
+              await member.remove_roles(role_host)
+              await logs.send(f"🔴 Le joueur {member.mention} a quitté le serveur {role_serv.name}.")
+              servers.update_one({'voice_name': role_serv.name, 'finished': None}, {'$pull': {'current_players': member.id}})
+
+          if (after.channel is None) or (after.channel.name != role_serv.name):
+              if len(voice.members) == 0:
+                  text = discord.utils.get(member.guild.channels, name = role_serv.name.lower())
+                  role = discord.utils.get(member.guild.roles, name = role_serv.name)            
+                  role_host = discord.utils.get(member.guild.roles, name = "Hote")
+                  servers.update_one({'voice_name': role_serv.name, 'finished': None}, {"$set": {"finished": int(time.time())}})
+                  await voice.delete()
+                  await text.delete()
+                  await role.delete()
+                  await member.remove_roles(role_host)
+                  await logs.send(f"🔴 Le serveur {voice.name} a été supprimé.")
+        except: pass
         pass
+
 def setup(bot):
     bot.add_cog(VoiceUpdate(bot))
