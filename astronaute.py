@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template
 from discord.ext import commands
-import threading
+from threading import Thread
 
 bot = commands.Bot(command_prefix='!')
 bot.remove_command('help')
@@ -24,8 +24,12 @@ def homepage():
 
 print("Serveur ON")
 
+def discord_bot():
+    bot.run("NzU3MTg3NTQ3NTQ0NjgyNTk3.X2cv2w.f08QQwi-B-dS6IEM6RUGsrcJW10")
+
+def website():
+    app.run()
+    
 if __name__ == "__main__":
-    t1 = threading.Thread(target=bot.run("NzU3MTg3NTQ3NTQ0NjgyNTk3.X2cv2w.f08QQwi-B-dS6IEM6RUGsrcJW10"))
-    t2 = threading.Thread(target=app.run)
-    t1.start()
-    t2.start()
+    Thread(target = discord_bot).start()
+    Thread(target = website).start()
