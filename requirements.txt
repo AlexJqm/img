@@ -4,3 +4,4 @@ pymongo
 dnspython
 dataclasses
 python-dotenv
+flask
