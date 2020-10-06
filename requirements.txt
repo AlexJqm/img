@@ -1,0 +1,8 @@
+discord
+asyncio
+pymongo
+time
+json
+dnspython
+dataclasses
+python-dotenv
