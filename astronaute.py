@@ -1,11 +1,11 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
 bot.remove_command('help')
 
-app = Flask(__name__, static_folder='public')
+app = Flask(__name__, static_folder='public', template_folder='views')
 
 for file in os.listdir("events"):
     if file.endswith(".py"):
@@ -19,7 +19,8 @@ for file in os.listdir("cogs"):
 
 @app.route('/')
 def homepage():
-    return ('index.html')
+    return render_template('index.html')
+
 print("Serveur ON")
 
 if __name__ == "__main__":
