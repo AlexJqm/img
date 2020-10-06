@@ -163,10 +163,9 @@ class VoiceUpdate(commands.Cog):
         #quitté un serveur
         role_serv = None
         host = False
-        if before.channel.name in server_dict.keys(): role_serv = role
-            if role.name == "Hote": host = True
-            else: pass
-
+        if before.channel.name in server_dict.keys(): role_serv = discord.utils.get(member.guild.roles, name = before.channel.name.capitalize())
+        if "Hote" in member.roles: host = True
+        
         voice = discord.utils.get(member.guild.channels, name = role_serv.name.capitalize())
         text = discord.utils.get(member.guild.channels, name = role_serv.name.lower())
 
@@ -195,6 +194,6 @@ class VoiceUpdate(commands.Cog):
                 await role.delete()
                 await member.remove_roles(role_host)
                 await logs.send(f"🔴 Le serveur {voice.name} a été supprimé.")
-
+        pass
 def setup(bot):
     bot.add_cog(VoiceUpdate(bot))
