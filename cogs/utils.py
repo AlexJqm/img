@@ -15,74 +15,7 @@ server_dict = {'Alfa':'🇦','Bravo':'🇧','Charlie':'🇨','Delta':'🇩','Ech
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        guild = self.bot.get_guild(757885527209803866)
-        channel = self.bot.get_channel(761336728203427870)
         
-        await channel.purge(limit = 1)
-        embed = discord.Embed(title = "Bienvenue", description = "Merci de vouloir rejoindre notre communauté. Afin de que tout le monde puisse jouer dans des bonnes conditions, je vous invite à lire les règles du serveur avant de vous enregistrer ici: <#757321244000649387>", color = 0xf7f7f7)
-        embed.add_field(name = "\u200B", value = "Une fois enregistrer, lisez attentivement les explications dans chaque channel, afin de comprendre le fonctionnement du serveur. Si vous rencontrez des problèmes, vous pouvez contacter l'équipe de <@&757263307987222569> <@&759375942887538720> dans le salon <#758303712660815893>.", inline = False)
-        embed.set_author(name = "Among Us France", icon_url= self.bot.user.avatar_url)
-        embed.set_thumbnail(url = self.bot.user.avatar_url)
-        embed.add_field(name = "\u200B", value = "👇 Enregistre toi ici!", inline = False)
-        msg = await channel.send(embed = embed)
-
-        channel2 = self.bot.get_channel(761336625380065290)
-        online_player = sum(member.status != discord.Status.offline and not member.bot for member in guild.members)
-        await channel2.purge(limit=1)
-
-        def reload(total_server, total_player, online_player):
-            for i in servers.find({'finished': None}):
-                chan = self.bot.get_channel(i['voice_id'])
-                if chan.name is not None:
-                    total_server += 1
-                    total_player += len(chan.members)
-                pass
-            online_player = sum(member.status != discord.Status.offline and not member.bot for member in guild.members)
-            return(total_server, total_player, online_player)
-
-        total_server, total_player, online_player = 0,0,0
-        total_server, total_player, online_player = reload(total_server, total_player, online_player)
-
-        embed = discord.Embed(title = "Statistiques", description = "Pour afficher les statistiques en temps réel,\nveuillez rafraichir avec l'émoji = 🔄", color = 0xf7f7f7)
-        embed.add_field(name = "\u200B", value = "Joueurs en jeu:\nNombre de serveurs:\nJoueurs en ligne:", inline = True)
-        embed.add_field(name = "\u200B", value = "\u200B", inline = True)
-        embed.add_field(name = "\u200B", value = f"{total_player}\n{total_server}\n{online_player}", inline = True)
-        embed.add_field(name = "\u200B", value = "👇 Rafraichis ici!", inline = False)
-        embed.set_author(name = "Among Us France", icon_url= self.bot.user.avatar_url)
-        embed.set_thumbnail(url = self.bot.user.avatar_url)
-        msg2 = await channel2.send(embed = embed)
-        
-        while True:
-            reactmoji = ['🆕']
-            for react in reactmoji: await msg.add_reaction(react)
-            reactmoji2 = ['🔄']
-            for react in reactmoji2: await msg2.add_reaction(react)
-            def check_react(reaction, user):
-                if reaction.message.id != msg.id or reaction.message.id != msg2.id: return False
-                if user.id == int(os.getenv("BOT_ID")): return False
-                if str(reaction.emoji) not in reactmoji or str(reaction.emoji) not in reactmoji2: return False
-                return True
-            res, user = await self.bot.wait_for('reaction_add', check = check_react)
-            print(res, user)
-            if '🆕' in str(res.emoji):
-                await msg.remove_reaction(res.emoji, user)
-                await user.add_roles(discord.utils.get(guild.roles, name = "Membre"))
-            if '🔄' in str(res.emoji):
-                embed.clear_fields()
-                total_server, total_player, online_player = 0,0,0
-                total_server, total_player, online_player = reload(total_server, total_player, online_player)
-                embed.add_field(name = "\u200B", value = "Joueurs en jeu:\nNombre de serveurs:\nJoueurs en ligne:", inline = True)
-                embed.add_field(name = "\u200B", value = "\u200B", inline = True)
-                embed.add_field(name = "\u200B", value = f"{total_player}\n{total_server}\n{online_player}", inline = True)
-                embed.add_field(name = "\u200B", value = "👇 Rafraichis ici!", inline = False)
-                await msg2.remove_reaction(res.emoji, user)
-                await msg2.edit(embed = embed)
-                
-            if str(res.emoji) not in reactmoji: await msg.remove_reaction(res.emoji, user)
-              
     @commands.command(pass_context = True, aliases=['reg'])
     async def register(self, ctx):
         await ctx.channel.purge(limit = 1)
@@ -168,7 +101,7 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def clear(self, ctx):
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur" or role.name == "Modérateur+"]
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
             await ctx.channel.purge()
 
