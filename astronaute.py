@@ -19,7 +19,7 @@ print("Serveur ON")
 
 @bot.command(pass_context = True)
 async def tt(ctx):
-    online_player = sum(member.status!=discord.Status.offline and not member.bot for member in ctx.message.guild.members)
+    online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.message.guild.members)
     print(online_player)
     await ctx.channel.purge(limit=1)
 
