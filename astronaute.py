@@ -17,4 +17,4 @@ for file in os.listdir("cogs"):
 print("Serveur ON")
 
 if __name__ == "__main__":
-    bot.run("NzU3MTg3NTQ3NTQ0NjgyNTk3.X2cv2w.f08QQwi-B-dS6IEM6RUGsrcJW10")
+    bot.run("NzYzNDQzMjU4ODg5MzM4OTAw.X33x8Q.v6ab7HeG6-4Wp6nQ3BCWCCI3_FQ")
