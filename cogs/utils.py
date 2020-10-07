@@ -48,7 +48,9 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def stats(self, ctx):
-        await ctx.channel.purge(limit = 1)
+        online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.message.guild.members)
+        print(online_player)
+        await ctx.channel.purge(limit=1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
             def reload(total_server, total_player, online_player):
