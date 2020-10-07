@@ -17,11 +17,5 @@ for file in os.listdir("cogs"):
 
 print("Serveur ON")
 
-@bot.command(pass_context = True)
-async def tt(ctx):
-    online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.message.guild.members)
-    print(online_player)
-    await ctx.channel.purge(limit=1)
-
 if __name__ == "__main__":
     bot.run("NzYzNDQzMjU4ODg5MzM4OTAw.X33x8Q.v6ab7HeG6-4Wp6nQ3BCWCCI3_FQ")

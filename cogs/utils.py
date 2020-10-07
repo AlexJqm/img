@@ -16,6 +16,35 @@ class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @client.event
+    async def on_ready():
+        channel = discord.utils.get(member.guild.channels, name = "Statistiques")
+        await channel.purge(limit = 1)
+        embed = discord.Embed(title = "Bienvenue", description = "Merci de vouloir rejoindre notre communauté. Afin de que tout le monde puisse jouer dans des bonnes conditions, je vous invite à lire les règles du serveur avant de vous enregistrer ici: <#757321244000649387>", color = 0xf7f7f7)
+        embed.add_field(name = "\u200B", value = "Une fois enregistrer, lisez attentivement les explications dans chaque channel, afin de comprendre le fonctionnement du serveur. Si vous rencontrez des problèmes, vous pouvez contacter l'équipe de <@&757263307987222569> <@&759375942887538720> dans le salon <#758303712660815893>.", inline = False)
+        embed.set_author(name = "Among Us France", icon_url= self.bot.user.avatar_url)
+        embed.set_thumbnail(url = self.bot.user.avatar_url)
+        embed.add_field(name = "\u200B", value = "👇 Enregistre toi ici!", inline = False)
+        msg = await channel.send(embed = embed)
+            
+            while True:
+                reactmoji = ['🆕']
+                for react in reactmoji: await msg.add_reaction(react)
+                
+                def check_react(reaction, user):
+                    if reaction.message.id != msg.id: return False
+                    if user.id == int(os.getenv("BOT_ID")): return False
+                    if str(reaction.emoji) not in reactmoji: return False
+                    return True
+                
+                res, user = await self.bot.wait_for('reaction_add', check = check_react)
+                
+                if '🆕' in str(res.emoji):
+                    await msg.remove_reaction(res.emoji, user)
+                    await user.add_roles(discord.utils.get(ctx.message.author.guild.roles, name = "Membre"))
+                
+                if str(res.emoji) not in reactmoji: await msg.remove_reaction(res.emoji, user)
+                  
     @commands.command(pass_context = True, aliases=['reg'])
     async def register(self, ctx):
         await ctx.channel.purge(limit = 1)
