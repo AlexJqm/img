@@ -19,7 +19,7 @@ class Utils(commands.Cog):
     @commands.command(pass_context = True, aliases=['reg'])
     async def register(self, ctx):
         await ctx.channel.purge(limit = 1)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur" or role.name == "Modérateur+"]
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
             embed = discord.Embed(title = "Bienvenue", description = "Merci de vouloir rejoindre notre communauté. Afin de que tout le monde puisse jouer dans des bonnes conditions, je vous invite à lire les règles du serveur avant de vous enregistrer ici: <#757321244000649387>", color = 0xf7f7f7)
             embed.add_field(name = "\u200B", value = "Une fois enregistrer, lisez attentivement les explications dans chaque channel, afin de comprendre le fonctionnement du serveur. Si vous rencontrez des problèmes, vous pouvez contacter l'équipe de <@&757263307987222569> <@&759375942887538720> dans le salon <#758303712660815893>.", inline = False)
@@ -49,7 +49,7 @@ class Utils(commands.Cog):
     @commands.command(pass_context = True)
     async def stats(self, ctx):
         await ctx.channel.purge(limit = 1)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur" or role.name == "Modérateur+"]
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
             def reload(total_server, total_player, online_player):
                 for i in server_dict.keys():
