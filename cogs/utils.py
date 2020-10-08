@@ -137,11 +137,10 @@ class Utils(commands.Cog):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
             embed = discord.Embed(title = "**Configuration des paramètres de jeu**", description = "Pour maintenir la compétitivité, les paramètres suivants sont requis pour toutes les cartes.", color = 0x28284B)
-            embed.add_field(name = "Paramètre de carte", value = "> # Impostors: 2\n> Confirm Ejects: On or Off\n> #Emergency Meetings: 1\n> Emergency Cooldown: 20s\n> Discussion Time: 15s\n> Voting Time: 120s\n> Player Speed: 1.25x", inline = True)
+            embed.add_field(name = "Paramètre de carte", value = "> # Impostors: 2\n> Confirm Ejects: On or Off\n> # Emergency Meetings: 1\n> Emergency Cooldown: 20s\n> Discussion Time: 15s\n> Voting Time: 120s\n> Player Speed: 1.25x", inline = True)
             embed.add_field(name = "\u200B", value = "> Crewmate Vision: 0.5x\n> Impostor Vision: 1.25x\n> Kill Cooldown: 22.5s\n> Kill Distance: Short\n> Visual Tasks: Off\n> # Common Tasks: 2\n> # Long Tasks: 1\n> # Short tasks: 5", inline = True)
-
+            embed.add_field(name = "**Règles de jeu importantes**", value = "1. Aucun message directe ou de communication extérieure n'est autorisée entre les joueurs pendant le jeu et tout au long d'un match.\n2. Si vous mourrez, vous n'êtes plus autorisé à participer aux conversations vocales jusqu'à la fin du match.\n3. Les fantômes ne peuvent communiquer avec d'autres fantômes que via le chat textuel fourni dans le jeu.\n4. Pas de [metagame](https://fr.wikipedia.org/wiki/M%C3%A9tagame).\n5. Pas d'annulation de [Med Scan](https://among-us.fandom.com/wiki/Submit_Scan).", inline = False)
             embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
-            embed.set_image(url="https://media.discordapp.net/attachments/763661375318523925/763680879515533362/bannnnn.png")
             embed.set_footer(text = "Among Us Francophone - Dernière mise à jour: 08/10/2020")
             msg = await ctx.send(embed = embed)
             
