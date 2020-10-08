@@ -136,10 +136,10 @@ class Utils(commands.Cog):
     async def tt3(self, ctx):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
-            embed = discord.Embed(title = "**Configuration du **", description = "> Êtes-vous le <@&763675029723545621>?\n> Êtes-vous le prochain <@&763675011550150716>?\n> Ou êtes-vous le prochain <@&763675102105174026>?\n> Pouvez-vous être parmi les meilleurs de nos classements?\n> Venez vous classer parmi nous!", color = 0x28284B)
-            embed.add_field(name = "**Lancement le DATE jusqu'au DATE**", value = "1. Among Us Francophone Challenge #1 est un tournoi sur 4 semaines, du DATE au DATE. \n2. Tous les <@&757888566553477161> peuvent participer.\n3. Les gagnants du tournoi sont jugés par leur ELO et leur rang.\n4. L'ELO est calculé à partir des résultats des matchs soumis à <@763443258889338900>, décrits dans #comment-ça-fonctionne\n5. Les classements sont réinitialisés au début du tournoi.\n6. Les matchs du tournoi doivent se dérouler avec les paramètres de la carte indiqués dans #paramètre-de-match\n7. Une inactivité de plus de 7 jours entraînera la perte d'une partie du MMR.\n8. Tous les prix sont exclusifs les uns des autres, ainsi un participant ne peut pas obtenir plus d'un prix.", inline = False)
-            embed.add_field(name = "__**Prix:**__", value = "1er Overall <@&763675029723545621>\n1er Crewmate <@&763675011550150716>\n1er Impostor <@&763675102105174026>", inline = True)
-            embed.add_field(name = "\u200B", value = "2ème Overall\n3ème Overall", inline = True)
+            embed = discord.Embed(title = "**Configuration des paramètres de jeu**", description = "Pour maintenir la compétitivité, les paramètres suivants sont requis pour toutes les cartes.", color = 0x28284B)
+            embed.add_field(name = "Paramètre de carte", value = "> # Impostors: 2\n> Confirm Ejects: On or Off\n> #Emergency Meetings: 1\n> Emergency Cooldown: 20s\n> Discussion Time: 15s\n> Voting Time: 120s\n> Player Speed: 1.25x", inline = True)
+            embed.add_field(name = "\u200B", value = "> Crewmate Vision: 0.5x\n> Impostor Vision: 1.25x\n> Kill Cooldown: 22.5s\n> Kill Distance: Short\n> Visual Tasks: Off\n> # Common Tasks: 2\n> # Long Tasks: 1\n> # Short tasks: 5", inline = True)
+
             embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
             embed.set_image(url="https://media.discordapp.net/attachments/763661375318523925/763680879515533362/bannnnn.png")
             embed.set_footer(text = "Among Us Francophone - Dernière mise à jour: 08/10/2020")
