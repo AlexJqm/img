@@ -128,7 +128,7 @@ class Utils(commands.Cog):
             embed.add_field(name = "__**Prix:**__", value = "1er Overall <@&763675029723545621>\n1er Crewmate <@&763675011550150716>\n1er Impostor <@&763675102105174026>", inline = True)
             embed.add_field(name = "\u200B", value = "2ème Overall\n3ème Overall", inline = True)
             embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
-            embed.set_image(url="https://media.discordapp.net/attachments/763661375318523925/763680879515533362/bannnnn.png")
+            embed.set_image(url="https://media.discordapp.net/attachments/763661375318523925/763693191504724018/bannnnn.png")
             embed.set_footer(text = "Among Us Francophone - Dernière mise à jour: 08/10/2020")
             msg = await ctx.send(embed = embed)
             
