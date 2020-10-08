@@ -117,20 +117,18 @@ class Utils(commands.Cog):
             embed.add_field(name = "__**Règles:**__", value = "1. Les participants sont responsables de s'assurer que les matchs sont correctement lancés et soumis.\n2. Toute forme de triche sera sévèrement sanctionné et pourra entraîner un bannissement.\n3. Si un membre remarque une tricherie, signalez-le dans le salon #report.\n4. Les spectateurs peuvent être considérés comme des complices et donc comme de la tricherie.", inline = False)
             embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
             embed.set_footer(text = "Among Us Francophone - Dernière mise à jour: 08/10/2020")
-            embed.set_thumbnail(url = self.bot.user.avatar_url)
             msg = await ctx.send(embed = embed)
 
     @commands.command(pass_context = True)
     async def tt2(self, ctx):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
-            embed = discord.Embed(title = "**Among Us Francophone Challenge #1**", description = "> Êtes-vous le <@763675029723545621>?\n> Êtes-vous le prochain <@763675011550150716>?\n> Ou êtes-vous le prochain <@763675102105174026>?\n> Pouvez-vous être parmi les meilleurs de nos classements?\n> Venez vous classer parmi nous!", color = 0xf7f7f7)
-            embed.add_field(name = "**Lancement le DATE jusqu'au DATE**", value = "1. The Among Us Francophone Challenge #1 est un tournoi sur 4 semaines, du DATE au DATE. \n2. Tous les @Membre peuvent participer.\n3. Les gagnants du tournoi sont jugés par leur ELO et leur rang.\n4. L'ELO est calculé à partir des résultats de match soumis à @Astronaute 2.0, décrits dans #comment-ça-fonctionne\n5. Les classements sont réinitialisés au début du tournoi.\n6. Les matchs du tournoi doivent se dérouler avec les paramètres de la carte indiqués dans #paramètre-de-match\n7. Une inactivité de plus de 7 jours entraînera la perte d'une partie du MMR.\n8. Tous les prix sont mutuellement exclusifs les uns des autres, ainsi un participant ne peut pas obtenir plus d'un prix.", inline = False)
-            embed.add_field(name = "__**Prix:**__", value = "1er Overall <@763675029723545621>\n1er Crewmate <@763675011550150716>\n1er Impostor <@763675102105174026>", inline = True)
+            embed = discord.Embed(title = "**Among Us Francophone Challenge #1**", description = "> Êtes-vous le <@&763675029723545621>?\n> Êtes-vous le prochain <@&763675011550150716>?\n> Ou êtes-vous le prochain <@&763675102105174026>?\n> Pouvez-vous être parmi les meilleurs de nos classements?\n> Venez vous classer parmi nous!", color = 0xf7f7f7)
+            embed.add_field(name = "**Lancement le DATE jusqu'au DATE**", value = "1. Among Us Francophone Challenge #1 est un tournoi sur 4 semaines, du DATE au DATE. \n2. Tous les <@&757888566553477161> peuvent participer.\n3. Les gagnants du tournoi sont jugés par leur ELO et leur rang.\n4. L'ELO est calculé à partir des résultats des matchs soumis à <@763443258889338900>, décrits dans #comment-ça-fonctionne\n5. Les classements sont réinitialisés au début du tournoi.\n6. Les matchs du tournoi doivent se dérouler avec les paramètres de la carte indiqués dans #paramètre-de-match\n7. Une inactivité de plus de 7 jours entraînera la perte d'une partie du MMR.\n8. Tous les prix sont exclusifs les uns des autres, ainsi un participant ne peut pas obtenir plus d'un prix.", inline = False)
+            embed.add_field(name = "__**Prix:**__", value = "1er Overall <@&763675029723545621>\n1er Crewmate <@&763675011550150716>\n1er Impostor <@&763675102105174026>", inline = True)
             embed.add_field(name = "\u200B", value = "2ème Overall\n3ème Overall", inline = True)
             embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
             embed.set_footer(text = "Among Us Francophone - Dernière mise à jour: 08/10/2020")
-            embed.set_thumbnail(url = self.bot.user.avatar_url)
             msg = await ctx.send(embed = embed)
             
 def setup(bot):
