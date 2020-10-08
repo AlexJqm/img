@@ -109,7 +109,7 @@ class Utils(commands.Cog):
     async def tt1(self, ctx):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
-            embed = discord.Embed(title = "__Comment ça fonctionne:__", description = "Le classement ELO attribue au joueur, suivant ses performances passées, un nombre de points tel que deux joueurs supposés de même force aient le même nombre de points. Plus le joueur est performant et plus son nombre de points ELO est élevé. Si un joueur réalise une performance supérieure à son niveau estimé, il gagne des points ELO. Réciproquement, il en perd s'il réalise une contre-performance.", color = 0xf7f7f7)
+            embed = discord.Embed(title = "__Comment ça fonctionne:__", description = "Le classement ELO attribue au joueur, suivant ses performances passées, un nombre de points tel que deux joueurs supposés de même force aient le même nombre de points. Plus le joueur est performant et plus son nombre de points ELO est élevé. Si un joueur réalise une performance supérieure à son niveau estimé, il gagne des points ELO. Réciproquement, il en perd s'il réalise une contre-performance.", color = 0x28284B)
             embed.add_field(name = "__**Leaderboards:**__", value = "Overall - Impostor - Crewmate", inline = False)
             embed.add_field(name = "**Lancer un match classé:**", value = "__Etape 1:__ 10 joueurs rejoignent le salon vocal #ranked.\n__Etape 2:__ Assurez-vous que les paramètres de la partie correspondent à nos règles.\n__Etape 3:__ Ecrivez `!start polus`, `!start skeld`, ou `!start mira` dans le salon textuel dédier à votre serveur vocal.\n> Les joueurs se verront attribuer un numéro, qui sera utilisé pour identifier qui sont les imposteurs lors de la soumission des résultats.", inline = False)
             embed.add_field(name = "**Pour soumettre le résultat d'un match:**", value = "Ecrivez `!impostor # # win` ou `!impostor # # lose`.\n> # est remplacé par les numéros des joueurs qui sont les imposteurs.\n*Par exemple: si le joueur 3 et le joueur 7 sont des imposteurs et qu'ils ont gagné, la commande serait:*\n`!impostor 3 7 w`\nSi les résultats sont inexacts, 1 joueur peut cliquer sur :no_entry: pour laisser le match non validé.\nLes résultats sont soumis dès que 5 joueurs cliquent sur ✅ pour confirmer les résultats.\nUne fois confirmés, les résultats ne peuvent pas être modifiés.", inline = False)
@@ -123,11 +123,25 @@ class Utils(commands.Cog):
     async def tt2(self, ctx):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
-            embed = discord.Embed(title = "**Among Us Francophone Challenge #1**", description = "> Êtes-vous le <@&763675029723545621>?\n> Êtes-vous le prochain <@&763675011550150716>?\n> Ou êtes-vous le prochain <@&763675102105174026>?\n> Pouvez-vous être parmi les meilleurs de nos classements?\n> Venez vous classer parmi nous!", color = 0xf7f7f7)
+            embed = discord.Embed(title = "**Among Us Francophone Challenge #1**", description = "> Êtes-vous le <@&763675029723545621>?\n> Êtes-vous le prochain <@&763675011550150716>?\n> Ou êtes-vous le prochain <@&763675102105174026>?\n> Pouvez-vous être parmi les meilleurs de nos classements?\n> Venez vous classer parmi nous!", color = 0x28284B)
             embed.add_field(name = "**Lancement le DATE jusqu'au DATE**", value = "1. Among Us Francophone Challenge #1 est un tournoi sur 4 semaines, du DATE au DATE. \n2. Tous les <@&757888566553477161> peuvent participer.\n3. Les gagnants du tournoi sont jugés par leur ELO et leur rang.\n4. L'ELO est calculé à partir des résultats des matchs soumis à <@763443258889338900>, décrits dans #comment-ça-fonctionne\n5. Les classements sont réinitialisés au début du tournoi.\n6. Les matchs du tournoi doivent se dérouler avec les paramètres de la carte indiqués dans #paramètre-de-match\n7. Une inactivité de plus de 7 jours entraînera la perte d'une partie du MMR.\n8. Tous les prix sont exclusifs les uns des autres, ainsi un participant ne peut pas obtenir plus d'un prix.", inline = False)
             embed.add_field(name = "__**Prix:**__", value = "1er Overall <@&763675029723545621>\n1er Crewmate <@&763675011550150716>\n1er Impostor <@&763675102105174026>", inline = True)
             embed.add_field(name = "\u200B", value = "2ème Overall\n3ème Overall", inline = True)
             embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
+            embed.set_image(url="https://media.discordapp.net/attachments/763661375318523925/763680879515533362/bannnnn.png")
+            embed.set_footer(text = "Among Us Francophone - Dernière mise à jour: 08/10/2020")
+            msg = await ctx.send(embed = embed)
+            
+    @commands.command(pass_context = True)
+    async def tt3(self, ctx):
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
+        if 'Admin' in role or 'Modérateur' in role:
+            embed = discord.Embed(title = "**Configuration du **", description = "> Êtes-vous le <@&763675029723545621>?\n> Êtes-vous le prochain <@&763675011550150716>?\n> Ou êtes-vous le prochain <@&763675102105174026>?\n> Pouvez-vous être parmi les meilleurs de nos classements?\n> Venez vous classer parmi nous!", color = 0x28284B)
+            embed.add_field(name = "**Lancement le DATE jusqu'au DATE**", value = "1. Among Us Francophone Challenge #1 est un tournoi sur 4 semaines, du DATE au DATE. \n2. Tous les <@&757888566553477161> peuvent participer.\n3. Les gagnants du tournoi sont jugés par leur ELO et leur rang.\n4. L'ELO est calculé à partir des résultats des matchs soumis à <@763443258889338900>, décrits dans #comment-ça-fonctionne\n5. Les classements sont réinitialisés au début du tournoi.\n6. Les matchs du tournoi doivent se dérouler avec les paramètres de la carte indiqués dans #paramètre-de-match\n7. Une inactivité de plus de 7 jours entraînera la perte d'une partie du MMR.\n8. Tous les prix sont exclusifs les uns des autres, ainsi un participant ne peut pas obtenir plus d'un prix.", inline = False)
+            embed.add_field(name = "__**Prix:**__", value = "1er Overall <@&763675029723545621>\n1er Crewmate <@&763675011550150716>\n1er Impostor <@&763675102105174026>", inline = True)
+            embed.add_field(name = "\u200B", value = "2ème Overall\n3ème Overall", inline = True)
+            embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
+            embed.set_image(url="https://media.discordapp.net/attachments/763661375318523925/763680879515533362/bannnnn.png")
             embed.set_footer(text = "Among Us Francophone - Dernière mise à jour: 08/10/2020")
             msg = await ctx.send(embed = embed)
             
