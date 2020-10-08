@@ -105,5 +105,20 @@ class Utils(commands.Cog):
         if 'Admin' in role or 'Modérateur' in role:
             await ctx.channel.purge()
 
+    @commands.command(pass_context = True)
+    async def ranked(self, ctx):
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
+        if 'Admin' in role or 'Modérateur' in role:
+            embed = discord.Embed(title = "__Comment ça fonctionne:__", description = "Le classement ELO attribue au joueur, suivant ses performances passées, un nombre de points tel que deux joueurs supposés de même force aient le même nombre de points. Plus le joueur est performant et plus son nombre de points ELO est élevé. Si un joueur réalise une performance supérieure à son niveau estimé, il gagne des points ELO. Réciproquement, il en perd s'il réalise une contre-performance.", color = 0xf7f7f7)
+            embed.add_field(name = "__**Leaderboards:**__", value = "Overall - Impostor - Crewmate", inline = True)
+            embed.add_field(name = "**Lancer un match classé:**", value = "__Etape 1:__ 10 joueurs rejoignent le salon vocal #ranked.\n__Etape 2:__ Assurez-vous que les paramètres de la partie correspondent à nos règles.\n__Etape 3:__ Ecrivez `!start polus`, `!start skeld`, ou `!start mira` dans le salon textuel dédier a votre serveur vocal.\n> Les joueurs se verront attribuer un numéro, qui sera utilisé pour identifier qui sont les imposteurs lors de la soumission des résultats.", inline = False)
+            embed.add_field(name = "**Pour soumettre le résultat d'un match:**", value = "Ecrivez `!impostor # # win` ou `!impostor # # lose`.\n> # est remplacé par les numéros des joueurs qui sont les imposteurs.\n*Par exemple: si le joueur 3 et le joueur 7 sont des imposteurs et qu'ils ont gagné, la commande serait:*\n`!impostor 3 7 w`\nSi les résultats sont inexacts, 1 joueur peut cliquer sur ⛔️ pour laisser le match non validé.\nLes résultats sont soumis dès que 5 joueurs cliquent sur ✅ pour confirmer les résultats.\nUne fois confirmés, les résultats ne peuvent pas être modifiés.", inline = False)
+            embed.add_field(name = "**Autres commandes:**", value = "`!stats` -- Affiche l'ensemble de vos stats et de vos ELO.\n`!map` -- Voir les stats par carte.\n`!current` -- Liste des matchs non validé.\n`!cancel` -- Supprime un match non validé.\n`!leaderboard` -- Affiche le classement de la saison en cours.", inline = False)
+            embed.add_field(name = "**Règles:**", value = "1. Les participants sont responsables de s'assurer que les matchs sont correctement lancés et soumis.\n2. Toute forme de triche sera sévèrement sanctionné et pourra entraîner un bannissement.\n3. Si un membre remarque une tricherie, signalez-le dans le salon #report.\n4. Les spectateurs peuvent être considérés comme des complices et donc comme de la tricherie.", inline = True)
+            embed.set_author(name = "Among Us Francophone", icon_url= self.bot.user.avatar_url)
+            embed.set_footer(text = "Dernière mise à jour: 08/10/2020")
+            embed.set_thumbnail(url = self.bot.user.avatar_url)
+            msg = await ctx.send(embed = embed)
+  
 def setup(bot):
     bot.add_cog(Utils(bot))
