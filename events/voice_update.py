@@ -156,7 +156,7 @@ class VoiceUpdate(commands.Cog):
                 cat_chat = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_TEXT_CHAT"))
                 voice = await member.guild.create_voice_channel(channel_name, category = open_server, user_limit = 10)
                 text = await member.guild.create_text_channel(channel_name, category = cat_chat)
-                
+                link = await voice.create_invite()
                 role_host = discord.utils.get(member.guild.roles, name = "Hote")
                 role_chan = await member.guild.create_role(name = channel_name, colour = discord.Colour(0xf1f1f1))
                 await text.set_permissions(role_chan, read_messages = True, send_messages = True, add_reactions = False)
@@ -189,7 +189,8 @@ class VoiceUpdate(commands.Cog):
                     created = int(time.time()),
                     finished = None,
                     current_players = [member.id],
-                    ban_players = []
+                    ban_players = [],
+                    invite_link = link
                 )
                 json_data = json.loads(db_server.to_json())
                 result = servers.insert_one(json_data)
