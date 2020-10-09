@@ -17,7 +17,7 @@ class Server:
     finished: int
     current_players: []
     ban_players: []
-    invite_link: str
+    link: str
 
     def to_json(self):
         return json.dumps(self.__dict__, default=lambda x: x.__dict__, indent=4)
