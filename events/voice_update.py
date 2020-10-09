@@ -191,7 +191,7 @@ class VoiceUpdate(commands.Cog):
                 finished = None,
                 current_players = [member.id],
                 ban_players = [],
-                link = link
+                link = str(link)
             )
             json_data = json.loads(db_server.to_json())
             result = servers.insert_one(json_data)
