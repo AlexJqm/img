@@ -26,7 +26,6 @@ class VoiceUpdate(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        print(member, before, after)
         logs = discord.utils.get(member.guild.channels, name = "logs")
 
         #position des vocaux par rapport au nombre de joueurs décroissants
