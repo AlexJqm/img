@@ -72,7 +72,7 @@ class VoiceUpdate(commands.Cog):
                 await member.remove_roles(role_serv)
                 await member.remove_roles(role_host)
                 await logs.send(f"🔴 Le joueur {member.mention} a quitté le serveur {role_serv.name}.")
-                servers.update_one({'voice_name': role_serv.name, 'finished': None}, {'$pull': {'current_players': member.id}})
+                servers.update_one({'voice_name': role_serv.name, 'finished': None}, {'$pull': {'current_players': member.name}})
 
             if (after.channel is None) or (after.channel.name != role_serv.name):
                 if len(voice.members) == 0:
@@ -110,7 +110,7 @@ class VoiceUpdate(commands.Cog):
                         serveur_dict = sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
                     else: break
                 await member.add_roles(discord.utils.get(member.guild.roles, name = serveur_dict[0][0]))
-                servers.update_one({'voice_name': serveur_dict[0][0], 'finished': None}, {'$push': {'current_players': member.id}})
+                servers.update_one({'voice_name': serveur_dict[0][0], 'finished': None}, {'$push': {'current_players': member.name}})
                 await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = serveur_dict[0][0]))
                 await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
                 waiting_auto.remove(member.name)
@@ -118,7 +118,7 @@ class VoiceUpdate(commands.Cog):
         
         #rejoindre un serveur manuellement
         try:
-          if after.channel.name in server_dict.keys() and servers.count_documents({"finished": None, "current_players":{"$in":[member.id]}}) == 0:
+          if after.channel.name in server_dict.keys() and servers.count_documents({"finished": None, "current_players":{"$in":[member.name]}}) == 0:
               waiting_join.append(member.name)
               if waiting_join[0] != member.name:
                   await asyncio.sleep(waiting_join.index(member.name)*2)
@@ -127,8 +127,8 @@ class VoiceUpdate(commands.Cog):
                   await member.edit(voice_channel = None)
               await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
               await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
-              if servers.count_documents({"current_players":{"$in":[member.id]}}) == 0:
-                  servers.update_one({'voice_name': after.channel.name, 'finished': None}, {'$push': {'current_players': member.id}})
+              if servers.count_documents({"current_players":{"$in":[member.name]}}) == 0:
+                  servers.update_one({'voice_name': after.channel.name, 'finished': None}, {'$push': {'current_players': member.name}})
               else: pass
 
               waiting_join.remove(member.name)
@@ -188,7 +188,7 @@ class VoiceUpdate(commands.Cog):
                 region = None,
                 created = int(time.time()),
                 finished = None,
-                current_players = [member.id],
+                current_players = [member.name],
                 ban_players = [],
                 link = str(link)
             )
