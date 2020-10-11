@@ -19,6 +19,7 @@ server_dict = {'Alfa':'🇦','Bravo':'🇧','Charlie':'🇨','Delta':'🇩','Ech
 waiting_create = []
 waiting_auto = []
 waiting_join = []
+trackvoice = {}
 
 class VoiceUpdate(commands.Cog):
     def __init__(self, bot):
@@ -113,6 +114,13 @@ class VoiceUpdate(commands.Cog):
                 servers.update_one({'voice_name': serveur_dict[0][0], 'finished': None}, {'$push': {'current_players': member.name}})
                 await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = serveur_dict[0][0]))
                 await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
+                if member.id not in trackvoice:
+                    voice_member = {'member': member.name, 'start': int(time.time()), 'end': None, 'total': None}
+                    trackvoice[member.id] = voice_member
+                else:
+                    trackvoice[member.id]['start'] = int(time.time())
+                    
+                print(trackvoice)
                 waiting_auto.remove(member.name)
         except: pass
         
