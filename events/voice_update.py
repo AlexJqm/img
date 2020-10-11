@@ -30,14 +30,15 @@ class VoiceUpdate(commands.Cog):
         logs = discord.utils.get(member.guild.channels, name = "logs")
         print(after, before)
         try:
-            if after.name in server_dict:
-              if member.id not in trackvoice:
-                  voice_member = {'member': member.name, 'start': int(time.time()), 'end': None, 'total': None}
-                  trackvoice[member.id] = voice_member
-              else:
-                  trackvoice[member.id]['start'] = int(time.time())
+            if after.name in server_dict.keys():
+                print("hh")
+                if member.id not in trackvoice.keys():
+                    voice_member = {'member': member.name, 'start': int(time.time()), 'end': None, 'total': None}
+                    trackvoice[member.id] = voice_member
+                else:
+                    trackvoice[member.id]['start'] = int(time.time())
 
-              print(trackvoice)
+                print(trackvoice)
         except: pass
         #position des vocaux par rapport au nombre de joueurs décroissants
         try:
