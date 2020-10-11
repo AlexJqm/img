@@ -106,8 +106,9 @@ class Utils(commands.Cog):
             await ctx.channel.purge()
 
     @commands.command(pass_context = True)
-    async def rules(self, ctx):
+    async def rules(self, ctx, msgID: int):
         await ctx.channel.purge(limit = 1)
+        msg = await ctx.fetch_message(msgID)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur" or role.name == "Modérateur+"]
         if 'Admin' in role or 'Modérateur' in role or 'Modérateur+' in role:
             embed = discord.Embed(title = "Les règles", description = "Le serveur Discord de Among Us Francophone est un lieu de vie commune où vous rencontrerez des joueurs / joueuses de tout âge et de tout horizon. Il est donc impératif de bien lire ce règlement pour éviter tout débordement. Nous sommes particulièrement attentifs et vigilants aux contenus proposés par les joueurs dans les channels textuels et émis dans les channels vocaux. Nous vous recommandons donc de faire attention a vos propos.", color = 0xf7f7f7)
@@ -128,7 +129,7 @@ class Utils(commands.Cog):
             embed.add_field(name = "\u200B", value = "👇 Appuie ici si tu les as lu. Merci!", inline = False)
             embed.set_thumbnail(url = self.bot.user.avatar_url)
             embed.set_author(name = "Among Us France", icon_url= self.bot.user.avatar_url)
-            await ctx.send(embed = embed)
+            await msg.edit(embed = embed)
             
 def setup(bot):
     bot.add_cog(Utils(bot))
