@@ -131,5 +131,12 @@ class Utils(commands.Cog):
             embed.set_author(name = "Among Us France", icon_url= self.bot.user.avatar_url)
             await msg.edit(embed = embed)
             
+    @commands.command(pass_context = True)
+    async def move(self, ctx, member: discord.Member = None, channel_id = None):
+        await ctx.channel.purge(limit = 1)
+        channel = self.bot.get_channel(channel_id)
+        print(channel)
+        voice = await channel.connect()   
+            
 def setup(bot):
     bot.add_cog(Utils(bot))
