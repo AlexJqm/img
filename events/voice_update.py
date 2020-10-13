@@ -31,10 +31,6 @@ class VoiceUpdate(commands.Cog):
         #position des vocaux par rapport au nombre de joueurs décroissants
         try:
             serveur_dict = {}
-            data = servers.find({'finished': None})
-            server_list = []
-            for i in data: server_list.append(i)
-            print(server_list)
             for key in server_dict.keys():
                 try:
                     voice = discord.utils.get(member.guild.channels, name = key)

@@ -109,7 +109,7 @@ class Utils(commands.Cog):
     async def rules(self, ctx, msgID: int):
         await ctx.channel.purge(limit = 1)
         msg = await ctx.fetch_message(msgID)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur" or role.name == "Modérateur+"]
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
             embed = discord.Embed(title = "Les règles", description = "Le serveur Discord de Among Us Francophone est un lieu de vie commune où vous rencontrerez des joueurs / joueuses de tout âge et de tout horizon. Il est donc impératif de bien lire ce règlement pour éviter tout débordement. Nous sommes particulièrement attentifs et vigilants aux contenus proposés par les joueurs dans les channels textuels et émis dans les channels vocaux. Nous vous recommandons donc de faire attention a vos propos.", color = 0xf7f7f7)
             embed.add_field(name = "**0.** Nous suivons les termes d'utilisation de Discord", value = "• Charte d’Utilisation de la Communauté:\nhttps://discordapp.com/guidelines\n• Conditions d'Utilisation:\nhttps://discordapp.com/terms", inline = False)
@@ -134,6 +134,7 @@ class Utils(commands.Cog):
     @commands.command(pass_context = True)
     async def move(self, ctx, member: discord.Member = None, channel_id = None):
         await ctx.channel.purge(limit = 1)
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
         if 'Admin' in role or 'Modérateur' in role:
           channel = ctx.message.author.voice.channel
           voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
