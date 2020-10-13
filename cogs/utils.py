@@ -134,9 +134,16 @@ class Utils(commands.Cog):
     @commands.command(pass_context = True)
     async def move(self, ctx, member: discord.Member = None, channel_id = None):
         await ctx.channel.purge(limit = 1)
-        channel = self.bot.get_channel(channel_id)
-        print(channel)
-        voice = await channel.connect()   
+        channel = ctx.message.author.voice.channel
+        voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+
+        if voice and voice.is_connected():
+            await voice.move_to(channel)
+        else:
+            voice = await channel.connect()
+            print(f"The bot has connected to {channel}\n")
+
+        await ctx.send(f"Joined {channel}")
             
 def setup(bot):
     bot.add_cog(Utils(bot))

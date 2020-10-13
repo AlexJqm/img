@@ -5,3 +5,4 @@ dnspython
 dataclasses
 python-dotenv
 flask
+PyNaCl

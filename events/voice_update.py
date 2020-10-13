@@ -50,7 +50,7 @@ class VoiceUpdate(commands.Cog):
                         serveur_dict[voice.name] = len(voice.members)
                         open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
                         await voice.edit(category = open_server)
-                    if voice.name is not None and len(voice.members) == 10:
+                    if voice.name is not None and len(voice.members) == 2:
                         full_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_FULL"))
                         await voice.edit(category = full_server)
                         await logs.send(f"🟢 Le serveur {voice.name} est désormais complet.")
