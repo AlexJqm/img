@@ -24,7 +24,7 @@ class Host(commands.Cog):
         
         if 'Hote' in role:
             if member is not None:
-                if [role.name for role in member.roles if role.name == "Admin" or role.name == "Modérateur" or role.name == "Modérateur+"] == []:
+                if [role.name for role in member.roles if role.name == "Admin" or role.name == "Security"] == []:
                     find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
                     role = discord.utils.get(member.guild.roles, name = find_role[0])  
                     voice = discord.utils.get(member.guild.channels, name = role.name)
@@ -46,7 +46,7 @@ class Host(commands.Cog):
     
         if 'Hote' in role:
             if member is not None:
-                check = [role.name for role in member.roles if role.name == "Admin" or role.name == "Modérateur" or role.name == "Modérateur+"]
+                check = [role.name for role in member.roles if role.name == "Admin" or role.name == "Security"]
                 if check == []:
                     find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
                     role = discord.utils.get(member.guild.roles, name = find_role[0])  
@@ -77,7 +77,7 @@ class Host(commands.Cog):
             for i in data: server = i
             if server['private'] == False:
                 servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'private': True}})
-                role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Membre")
+                role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Crewmate")
                 await voice.set_permissions(role_membre, connect = True, view_channel = False)
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a passé le serveur en privé.", color = 0x26f752))
                 await logs.send(f"🟢 L'hôte {ctx.message.author.mention} a rendu le serveur {voice.name} privé.")
@@ -99,7 +99,7 @@ class Host(commands.Cog):
             for i in data: server = i
             if server['private'] == True:
                 servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'private': False}})
-                role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Membre")
+                role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Crewmate")
                 await voice.set_permissions(role_membre, connect = True, view_channel = True)
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a passé le serveur en publique.", color = 0x26f752))
                 await logs.send(f"🟢 L'hôte {ctx.message.author.mention} a rendu le serveur {voice.name} publique.")

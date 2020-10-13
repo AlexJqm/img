@@ -162,11 +162,11 @@ class VoiceUpdate(commands.Cog):
                 role_chan = await member.guild.create_role(name = channel_name, colour = discord.Colour(0xf1f1f1))
                 await text.set_permissions(role_chan, read_messages = True, send_messages = True, add_reactions = False)
 
-                role_membre = discord.utils.get(member.guild.roles, name = "Membre")
+                role_membre = discord.utils.get(member.guild.roles, name = "Crewmate")
                 await voice.set_permissions(role_membre, connect = True, view_channel = True)
                 await text.set_permissions(role_membre, read_messages = False, send_messages = False)
 
-                role_modo = discord.utils.get(member.guild.roles, name = "Modérateur")
+                role_modo = discord.utils.get(member.guild.roles, name = "Security")
                 await voice.set_permissions(role_modo, connect = True, view_channel = True)
                 await text.set_permissions(role_modo, read_messages = True, send_messages = True)
 

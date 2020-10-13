@@ -19,8 +19,8 @@ class Utils(commands.Cog):
     @commands.command(pass_context = True, aliases=['reg'])
     async def register(self, ctx):
         await ctx.channel.purge(limit = 1)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
-        if 'Admin' in role or 'Modérateur' in role:
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
             embed = discord.Embed(title = "Bienvenue", description = "Merci de vouloir rejoindre notre communauté. Afin de que tout le monde puisse jouer dans des bonnes conditions, je vous invite à lire les règles du serveur avant de vous enregistrer ici: <#757321244000649387>", color = 0xf7f7f7)
             embed.add_field(name = "\u200B", value = "Une fois enregistrer, lisez attentivement les explications dans chaque channel, afin de comprendre le fonctionnement du serveur. Si vous rencontrez des problèmes, vous pouvez contacter l'équipe de <@&757263307987222569> <@&759375942887538720> dans le salon <#758303712660815893>.", inline = False)
             embed.set_author(name = "Among Us France", icon_url= self.bot.user.avatar_url)
@@ -51,8 +51,8 @@ class Utils(commands.Cog):
         online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.message.guild.members)
         print(online_player)
         await ctx.channel.purge(limit=1)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
-        if 'Admin' in role or 'Modérateur' in role:
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
             def reload(total_server, total_player, online_player):
                 for i in server_dict.keys():
                     try:
@@ -101,16 +101,16 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def clear(self, ctx):
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
-        if 'Admin' in role or 'Modérateur' in role:
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
             await ctx.channel.purge()
 
     @commands.command(pass_context = True)
     async def rules(self, ctx, msgID: int):
         await ctx.channel.purge(limit = 1)
         msg = await ctx.fetch_message(msgID)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
-        if 'Admin' in role or 'Modérateur' in role:
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
             embed = discord.Embed(title = "Les règles", description = "Le serveur Discord de Among Us Francophone est un lieu de vie commune où vous rencontrerez des joueurs / joueuses de tout âge et de tout horizon. Il est donc impératif de bien lire ce règlement pour éviter tout débordement. Nous sommes particulièrement attentifs et vigilants aux contenus proposés par les joueurs dans les channels textuels et émis dans les channels vocaux. Nous vous recommandons donc de faire attention a vos propos.", color = 0xf7f7f7)
             embed.add_field(name = "**0.** Nous suivons les termes d'utilisation de Discord", value = "• Charte d’Utilisation de la Communauté:\nhttps://discordapp.com/guidelines\n• Conditions d'Utilisation:\nhttps://discordapp.com/terms", inline = False)
             embed.add_field(name = "\u200B", value = "**1.** Soyez tout simplement respectueux et gentil les uns envers les autres, c'est un jeu. Restez polis et courtois. Les formules de politesse telles que 'Bonjour/Au revoir/Merci/S'il te plait' n'ont jamais tué personne.", inline = False)
@@ -134,8 +134,8 @@ class Utils(commands.Cog):
     @commands.command(pass_context = True)
     async def move(self, ctx, member: discord.Member = None, channel_id = None):
         await ctx.channel.purge(limit = 1)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Modérateur"]
-        if 'Admin' in role or 'Modérateur' in role:
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
           channel = ctx.message.author.voice.channel
           voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
           if voice and voice.is_connected(): await voice.move_to(channel)
