@@ -29,21 +29,25 @@ class VoiceUpdate(commands.Cog):
         logs = discord.utils.get(member.guild.channels, name = "⛔astronaute-logs")
 
         #position des vocaux par rapport au nombre de joueurs décroissants
-        serveur_dict = {}
-        for key in server_dict.keys():
-            voice = discord.utils.get(member.guild.channels, name = key)
-            if voice.name is not None and len(voice.members) < 10:
-                serveur_dict[voice.name] = len(voice.members)
-                open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
-                await voice.edit(category = open_server)
-            if voice.name is not None and len(voice.members) == 10:
-                full_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_FULL"))
-                await voice.edit(category = full_server)
-            pass
-        serveur_dict= sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
-        for key in serveur_dict:
-            voice = discord.utils.get(member.guild.channels, name = key[0])
-            await voice.edit(position = serveur_dict.index(key))
+        try:
+            serveur_dict = {}
+            for key in server_dict.keys():
+                try:
+                    voice = discord.utils.get(member.guild.channels, name = key)
+                    if voice.name is not None and len(voice.members) < 10:
+                        serveur_dict[voice.name] = len(voice.members)
+                        open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
+                        await voice.edit(category = open_server)
+                    if voice.name is not None and len(voice.members) == 10:
+                        full_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_FULL"))
+                        await voice.edit(category = full_server)
+                except: pass
+                pass
+            serveur_dict= sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
+            for key in serveur_dict:
+                voice = discord.utils.get(member.guild.channels, name = key[0])
+                await voice.edit(position = serveur_dict.index(key))
+        except: pass
 
         #quitté un serveur
         try:
