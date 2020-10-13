@@ -19,7 +19,6 @@ server_dict = {'Alfa':'🇦','Bravo':'🇧','Charlie':'🇨','Delta':'🇩','Ech
 waiting_create = []
 waiting_auto = []
 waiting_join = []
-trackvoice = {}
 
 class VoiceUpdate(commands.Cog):
     def __init__(self, bot):
@@ -28,21 +27,14 @@ class VoiceUpdate(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         logs = discord.utils.get(member.guild.channels, name = "logs")
-        print(after, before)
-        try:
-            if after.name in server_dict.keys():
-                print("hh")
-                if member.id not in trackvoice.keys():
-                    voice_member = {'member': member.name, 'start': int(time.time()), 'end': None, 'total': None}
-                    trackvoice[member.id] = voice_member
-                else:
-                    trackvoice[member.id]['start'] = int(time.time())
 
-                print(trackvoice)
-        except: pass
         #position des vocaux par rapport au nombre de joueurs décroissants
         try:
             serveur_dict = {}
+            data = servers.find({'finished': None})
+            server_list = []
+            for i in data: server_list.append(i)
+            print(server_list)
             for key in server_dict.keys():
                 try:
                     voice = discord.utils.get(member.guild.channels, name = key)
@@ -50,7 +42,7 @@ class VoiceUpdate(commands.Cog):
                         serveur_dict[voice.name] = len(voice.members)
                         open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
                         await voice.edit(category = open_server)
-                    if voice.name is not None and len(voice.members) == 2:
+                    if voice.name is not None and len(voice.members) == 10:
                         full_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_FULL"))
                         await voice.edit(category = full_server)
                         await logs.send(f"🟢 Le serveur {voice.name} est désormais complet.")
