@@ -105,7 +105,7 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['inv'])
     async def invite(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "logs")
+        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
         role = discord.utils.get(member.guild.roles, name = find_role[0])  
         voice = discord.utils.get(member.guild.channels, name = role.name)
@@ -129,7 +129,7 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['vh'])
     async def votehost(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "logs")
+        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         if member is not None:
             find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
             role = discord.utils.get(member.guild.roles, name = find_role[0])  

@@ -19,7 +19,7 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['k'])
     async def kick(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "logs")
+        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
         
         if 'Hote' in role:
@@ -41,7 +41,7 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['b'])
     async def ban(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "logs")
+        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
@@ -65,7 +65,7 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['pv'])
     async def private(self, ctx):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "logs")
+        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
@@ -87,7 +87,7 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['pu'])
     async def public(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "logs")
+        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
