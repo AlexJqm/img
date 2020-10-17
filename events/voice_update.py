@@ -102,9 +102,9 @@ class VoiceUpdate(commands.Cog):
                     pass
                 serveur_dict = sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
                 while True:
-                    if servers.count_documents({'voice_name': serveur_dict[0][0], 'finished': None, "ban_players":{"$in":[member.id]}}) == 1:
+                    if servers.count_documents({'voice_name': serveur_dict[0][0], "ban_players":{"$in":[member.id]}}) == 1:
                         serveur_dict = sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
-                    if servers.count_documents({'voice_name': serveur_dict[0][0], 'finished': None, "private": True}) == 1:
+                    if servers.count_documents({'voice_name': serveur_dict[0][0], "private": True}) == 1:
                         serveur_dict = sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
                     else: break
                 await member.add_roles(discord.utils.get(member.guild.roles, name = serveur_dict[0][0]))
