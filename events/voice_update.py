@@ -133,7 +133,6 @@ class VoiceUpdate(commands.Cog):
         except: pass
         
         #créé un serveur
-        print(after, before)
         global waiting_list
         try:
             try:
