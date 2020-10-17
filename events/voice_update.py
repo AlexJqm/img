@@ -132,11 +132,15 @@ class VoiceUpdate(commands.Cog):
 
               waiting_join.remove(member.name)
         except: pass
+        
         #créé un serveur
         try:
             global waiting_list
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-
+                if servers.count_documents({'host_id': member.id, 'finished': None}) == 0 : pass
+                else:
+                    await member.send("Vous avez déjà créé un channel il y a peu, veuillez patienter 15 secondes.")
+                    await asyncio.sleep(15)
                 if member.name not in waiting_create:
                     waiting_create.append(member.name)
                     if waiting_create[0] != member.name:
