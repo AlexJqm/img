@@ -136,10 +136,10 @@ class Utils(commands.Cog):
         await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
-          channel = ctx.message.author.voice.channel
-          voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
-          if voice and voice.is_connected(): await voice.move_to(channel)
-          else: voice = await channel.connect()
+            channel = ctx.message.author.voice.channel
+            voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
+            if voice and voice.is_connected(): await voice.move_to(channel)
+            else: voice = await channel.connect()
             
 def setup(bot):
     bot.add_cog(Utils(bot))

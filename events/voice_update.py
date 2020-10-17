@@ -54,7 +54,7 @@ class VoiceUpdate(commands.Cog):
             role_serv = None
             host = False
             if before.channel.name in server_dict.keys(): role_serv = discord.utils.get(member.guild.roles, name = before.channel.name.capitalize())
-            if servers.count_documents({'voice_name': before.channel.name.capitalize(), 'finished': None, 'host_name': member.name}) > 0:  host = True
+            if servers.count_documents({'voice_name': before.channel.name.capitalize(), 'host_id': member.id}) > 0:  host = True
 
             voice = discord.utils.get(member.guild.channels, name = role_serv.name.capitalize())
             text = discord.utils.get(member.guild.channels, name = role_serv.name.lower())
@@ -65,20 +65,19 @@ class VoiceUpdate(commands.Cog):
                 if host and len(voice.members) > 0:
                     new_host = voice.members[randrange(len(voice.members))]
                     await new_host.add_roles(role_host)
-                    servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'host_name': new_host.name, 'host_id': new_host.id}})
+                    servers.update_one({'voice_id': voice.id}, {"$set": {'host_id': new_host.id}})
                     await logs.send(f"🟢 Le joueur {new_host.mention} a été designer par défaut comme nouvel hôte du serveur {role_serv.name}.")
                     await text.send(embed = discord.Embed(title = f"ℹ️ Serveur {text.name.capitalize()}", description = f"Le joueur {new_host.mention} à été designer par défaut comme nouvel hôte du serveur {text.name.capitalize()}.", color = 0x26f752))
                 await member.remove_roles(role_serv)
                 await member.remove_roles(role_host)
                 await logs.send(f"🔴 Le joueur {member.mention} a quitté le serveur {role_serv.name}.")
-                servers.update_one({'voice_name': role_serv.name, 'finished': None}, {'$pull': {'current_players': member.name}})
 
             if (after.channel is None) or (after.channel.name != role_serv.name):
                 if len(voice.members) == 0:
                     text = discord.utils.get(member.guild.channels, name = role_serv.name.lower())
                     role = discord.utils.get(member.guild.roles, name = role_serv.name)            
                     role_host = discord.utils.get(member.guild.roles, name = "Hote")
-                    servers.update_one({'voice_name': role_serv.name, 'finished': None}, {"$set": {"finished": int(time.time())}})
+                    servers.delete_one({'voice_id': voice.id})
                     await voice.delete()
                     await text.delete()
                     await role.delete()
@@ -137,9 +136,11 @@ class VoiceUpdate(commands.Cog):
         print(after, before)
         global waiting_list
         try:
-            if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO") and before.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-                await member.send("Vous avez déjà créé un channel il y a peu, veuillez patienter 15 secondes.")
-                await asyncio.sleep(15)
+            try:
+                if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO") and before.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
+                    await member.send("Vous avez déjà créé un channel il y a peu, veuillez patienter 15 secondes.")
+                    await asyncio.sleep(15)
+            except: pass
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
                 if member.name not in waiting_create:
                     waiting_create.append(member.name)
@@ -183,19 +184,11 @@ class VoiceUpdate(commands.Cog):
                     db_server = Server(
                         _id = id,
                         host_id = member.id,
-                        host_name = member.name,
                         voice_id = voice.id,
-                        voice_name = voice.name,
                         text_id = text.id,
-                        text_name = text.name,
                         private = False,
                         code = None,
-                        region = None,
-                        created = int(time.time()),
-                        finished = None,
-                        current_players = [member.name],
-                        ban_players = [],
-                        link = str(link)
+                        region = None
                     )
                     json_data = json.loads(db_server.to_json())
                     result = servers.insert_one(json_data)
