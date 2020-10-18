@@ -108,11 +108,11 @@ class VoiceUpdate(commands.Cog):
         
         #rejoindre un serveur manuellement
         try:
-          if after.channel.name in name_list:
-              if servers.count_documents({'voice_name': name_dict[0][0], "banned":{"$in":[member.id]}}) == 1:
-                  await member.edit(voice_channel = None)
-              await member.add_roles(discord.utils.get(member.guild.roles, name = str(after.channel.name)))
-              await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
+              if after.channel.name in name_list:
+                if servers.count_documents({'voice_name': after.channel.name, "banned":{"$in":[member.id]}}) == 1:
+                    await member.edit(voice_channel = None)
+                await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
+                await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
         except: pass
         
         #créé un serveur
