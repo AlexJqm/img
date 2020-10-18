@@ -16,9 +16,6 @@ load_dotenv(dotenv_path)
 
 servers = db_connect()
 name_list = ['Alfa','Bravo','Charlie','Delta','Echo','Foxtrot','Golf','Hotel','India','Juliett','Kilo','Lima','Mike','November','Oscar','Papa','Quebec','Romeo','Sierra','Tango','Uniform','Victor','Whiskey','X-ray','Yankee','Zulu']
-waiting_create = []
-waiting_auto = []
-waiting_join = []
 
 class VoiceUpdate(commands.Cog):
     def __init__(self, bot):
@@ -88,10 +85,6 @@ class VoiceUpdate(commands.Cog):
         #rejoindre un serveur automatiquement
         try:
             if after.channel.name == os.getenv("NAME_VOC_JOIN_AUTO"):
-                waiting_auto.append(member.name)
-                if waiting_auto[0] != member.name:
-                    await asyncio.sleep(waiting_auto.index(member.name)*3)
-
                 name_dict = {}
                 for key in name_list:
                     try:
@@ -102,43 +95,37 @@ class VoiceUpdate(commands.Cog):
                     pass
                 name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
                 while True:
-                    if servers.count_documents({'voice_name': name_dict[0][0], "ban_players":{"$in":[member.id]}}) == 1:
+                    if servers.count_documents({'voice_name': name_dict[0][0], "banned":{"$in":[member.id]}}) == 1:
                         name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
                     if servers.count_documents({'voice_name': name_dict[0][0], "private": True}) == 1:
                         name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
                     else: break
                 await member.add_roles(discord.utils.get(member.guild.roles, name = name_dict[0][0]))
-                servers.update_one({'voice_name': name_dict[0][0], 'finished': None}, {'$push': {'current_players': member.name}})
+                servers.update_one({'voice_name': name_dict[0][0]}, {'$push': {'current_players': member.name}})
                 await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = name_dict[0][0]))
                 await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
-                waiting_auto.remove(member.name)
         except: pass
         
         #rejoindre un serveur manuellement
         try:
           if after.channel.name in name_list:
-              waiting_join.append(member.name)
-              if waiting_join[0] != member.name:
-                  await asyncio.sleep(waiting_join.index(member.name)*2)
-              if servers.count_documents({'voice_name': name_dict[0][0], 'finished': None, "ban_players":{"$in":[member.id]}}) == 1:
+              if servers.count_documents({'voice_name': name_dict[0][0], "banned":{"$in":[member.id]}}) == 1:
                   await member.edit(voice_channel = None)
               await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
               await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
-              waiting_join.remove(member.name)
         except: pass
         
         #créé un serveur
         global waiting_list
         try:
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-                if servers.find({'host_id': member.id}) == 1:
+                if servers.find({'host_id': member.id}) == 1 or before.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
+                    await member.edit(voice_channel = None)
                     await asyncio.sleep(15)
                 else:
                     data = servers.find({})
-
                     server_list = []
                     for i in data: server_list.append(i)
-
                     count = 0
                     for i in server_list:
                         while i['voice_name'] == list(name_list)[count]: count += 1
@@ -181,7 +168,6 @@ class VoiceUpdate(commands.Cog):
                     )
                     json_data = json.loads(db_server.to_json())
                     result = servers.insert_one(json_data)
-                    waiting_create.remove(member.name)
         except: pass
 def setup(bot):
     bot.add_cog(VoiceUpdate(bot))

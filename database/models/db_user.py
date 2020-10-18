@@ -11,7 +11,6 @@ class Server:
     private: bool
     code: str
     region: str
-    banned = []
-
+    banned: []
     def to_json(self):
         return json.dumps(self.__dict__, default=lambda x: x.__dict__, indent=4)
