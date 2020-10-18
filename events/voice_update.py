@@ -31,11 +31,11 @@ class VoiceUpdate(commands.Cog):
             for key in name_list:
                 try:
                     voice = discord.utils.get(member.guild.channels, name = key)
-                    if voice.name is not None and len(voice.members) < 10:
+                    if voice.name is not None and len(voice.members) < 2:
                         name_dict[voice.name] = len(voice.members)
                         open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
                         await voice.edit(category = open_server)
-                    if voice.name is not None and len(voice.members) == 10:
+                    if voice.name is not None and len(voice.members) == 2:
                         full_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_FULL"))
                         await voice.edit(category = full_server)
                 except: pass
@@ -111,7 +111,7 @@ class VoiceUpdate(commands.Cog):
           if after.channel.name in name_list:
               if servers.count_documents({'voice_name': name_dict[0][0], "banned":{"$in":[member.id]}}) == 1:
                   await member.edit(voice_channel = None)
-              await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
+              await member.add_roles(discord.utils.get(member.guild.roles, name = str(after.channel.name)))
               await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
         except: pass
         

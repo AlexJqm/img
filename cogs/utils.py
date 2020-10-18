@@ -151,5 +151,13 @@ class Utils(commands.Cog):
         await ctx.guild.create_voice_channel('Creer un serveur', category = cat_server)
         await ctx.guild.create_voice_channel('Rejoindre un serveur', category = cat_server)
         
+    @commands.command(pass_context = True)
+    async def tt(self, ctx):
+        await ctx.channel.purge(limit = 1)
+        channel = ctx.message.author.voice.channel
+        voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
+        if voice and voice.is_connected(): await voice.move_to(channel)
+        else: voice = await channel.connect()
+            
 def setup(bot):
     bot.add_cog(Utils(bot))
