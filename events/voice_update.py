@@ -118,58 +118,62 @@ class VoiceUpdate(commands.Cog):
         print(waiting_dict)
         try:
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
+                if member.name not in waiting_dict.keys():
+                    waiting_dict[member.name] = int(time.time()) + 30
+                    data = servers.find({})
+                    server_list = []
+                    for i in data: server_list.append(i)
+                    count = 0
+                    for i in server_list:
+                        while i['voice_name'] == list(name_list)[count]: count += 1
+                    channel_name = list(name_list)[count]
+
+                    open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
+                    cat_chat = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_TEXT_CHAT"))
+                    voice = await member.guild.create_voice_channel(channel_name, category = open_server, user_limit = 10)
+                    text = await member.guild.create_text_channel(channel_name, category = cat_chat)
+                    link = await voice.create_invite(max_age = 0)
+
+                    role_host = discord.utils.get(member.guild.roles, name = "Hote")
+                    role_chan = await member.guild.create_role(name = channel_name, colour = discord.Colour(0xf1f1f1))
+                    await text.set_permissions(role_chan, read_messages = True, send_messages = True, add_reactions = False)
+
+                    role_membre = discord.utils.get(member.guild.roles, name = "Crewmate")
+                    await voice.set_permissions(role_membre, connect = True, view_channel = True)
+                    await text.set_permissions(role_membre, read_messages = False, send_messages = False)
+
+                    role_modo = discord.utils.get(member.guild.roles, name = "Security")
+                    await voice.set_permissions(role_modo, connect = True, view_channel = True)
+                    await text.set_permissions(role_modo, read_messages = True, send_messages = True)
+
+                    await member.add_roles(role_chan, role_host)
+                    await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = channel_name))
+
+                    await logs.send(f"🟢 Le joueur {member.mention} a créé le serveur {voice.name}.")
+
+                    id = servers.count_documents({}) + 1
+                    db_server = Server(
+                        _id = id,
+                        host_id = member.id,
+                        voice_id = voice.id,
+                        voice_name = voice.name,
+                        text_id = text.id,
+                        private = False,
+                        code = None,
+                        region = None,
+                        banned = []
+                    )
+                    json_data = json.loads(db_server.to_json())
+                    result = servers.insert_one(json_data)
                 if member.name in waiting_dict.keys():
+                    if waiting_dict[member.name] >= int(time.time()):
+                        time_left = waiting_dict[member.name] - int(time.time())
+                        await member.send(f"Merci de patientez {time_left} secondes avant de créer un nouveau serveur.")
+                        await member.edit(voice_channel = None)
                     while waiting_dict[member.name] >= int(time.time()):
                         await asyncio.sleep(1)
                         print(waiting_dict[member.name], int(time.time()))
                     waiting_dict.pop(member.name)
-
-                waiting_dict[member.name] = int(time.time()) + 30
-                data = servers.find({})
-                server_list = []
-                for i in data: server_list.append(i)
-                count = 0
-                for i in server_list:
-                    while i['voice_name'] == list(name_list)[count]: count += 1
-                channel_name = list(name_list)[count]
-
-                open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
-                cat_chat = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_TEXT_CHAT"))
-                voice = await member.guild.create_voice_channel(channel_name, category = open_server, user_limit = 10)
-                text = await member.guild.create_text_channel(channel_name, category = cat_chat)
-                link = await voice.create_invite(max_age = 0)
-
-                role_host = discord.utils.get(member.guild.roles, name = "Hote")
-                role_chan = await member.guild.create_role(name = channel_name, colour = discord.Colour(0xf1f1f1))
-                await text.set_permissions(role_chan, read_messages = True, send_messages = True, add_reactions = False)
-
-                role_membre = discord.utils.get(member.guild.roles, name = "Crewmate")
-                await voice.set_permissions(role_membre, connect = True, view_channel = True)
-                await text.set_permissions(role_membre, read_messages = False, send_messages = False)
-
-                role_modo = discord.utils.get(member.guild.roles, name = "Security")
-                await voice.set_permissions(role_modo, connect = True, view_channel = True)
-                await text.set_permissions(role_modo, read_messages = True, send_messages = True)
-
-                await member.add_roles(role_chan, role_host)
-                await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = channel_name))
-
-                await logs.send(f"🟢 Le joueur {member.mention} a créé le serveur {voice.name}.")
-
-                id = servers.count_documents({}) + 1
-                db_server = Server(
-                    _id = id,
-                    host_id = member.id,
-                    voice_id = voice.id,
-                    voice_name = voice.name,
-                    text_id = text.id,
-                    private = False,
-                    code = None,
-                    region = None,
-                    banned = []
-                )
-                json_data = json.loads(db_server.to_json())
-                result = servers.insert_one(json_data)
         except: pass
                 
 def setup(bot):
