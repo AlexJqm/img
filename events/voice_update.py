@@ -119,7 +119,8 @@ class VoiceUpdate(commands.Cog):
         global waiting_list
         try:
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-                if servers.find({'host_id': member.id}) == 1 or before.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
+                if servers.find({'host_id': member.id}) == 1 or before.channel.name == os.getenv("NAME_VOC_CREATE_AUTO") and after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
+                    print('hh')
                     await member.edit(voice_channel = None)
                     await asyncio.sleep(15)
                 else:
