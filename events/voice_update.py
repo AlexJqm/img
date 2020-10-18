@@ -30,12 +30,12 @@ class VoiceUpdate(commands.Cog):
 
         #position des vocaux par rapport au nombre de joueurs décroissants
         try:
-            serveur_dict = {}
-            for key in server_dict.keys():
+            name_dict =  {}
+            for key in name_list:
                 try:
                     voice = discord.utils.get(member.guild.channels, name = key)
                     if voice.name is not None and len(voice.members) < 10:
-                        serveur_dict[voice.name] = len(voice.members)
+                        name_dict[voice.name] = len(voice.members)
                         open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
                         await voice.edit(category = open_server)
                     if voice.name is not None and len(voice.members) == 10:
@@ -43,17 +43,17 @@ class VoiceUpdate(commands.Cog):
                         await voice.edit(category = full_server)
                 except: pass
                 pass
-            serveur_dict= sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
-            for key in serveur_dict:
+            name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
+            for key in name_dict:
                 voice = discord.utils.get(member.guild.channels, name = key[0])
-                await voice.edit(position = serveur_dict.index(key))
+                await voice.edit(position = name_dict.index(key))
         except: pass
 
         #quitté un serveur
         try:
             role_serv = None
             host = False
-            if before.channel.name in server_dict.keys(): role_serv = discord.utils.get(member.guild.roles, name = before.channel.name.capitalize())
+            if before.channel.name in name_list: role_serv = discord.utils.get(member.guild.roles, name = before.channel.name.capitalize())
             if servers.count_documents({'voice_name': before.channel.name.capitalize(), 'host_id': member.id}) > 0:  host = True
 
             voice = discord.utils.get(member.guild.channels, name = role_serv.name.capitalize())
@@ -92,36 +92,36 @@ class VoiceUpdate(commands.Cog):
                 if waiting_auto[0] != member.name:
                     await asyncio.sleep(waiting_auto.index(member.name)*3)
 
-                serveur_dict = {}
-                for key in server_dict.keys():
+                name_dict = {}
+                for key in name_list:
                     try:
                         voice = discord.utils.get(member.guild.channels, name = key)
                         if voice.name is not None and len(voice.members) < 10:
-                            serveur_dict[voice.name] = len(voice.members)
+                            name_dict[voice.name] = len(voice.members)
                     except: pass
                     pass
-                serveur_dict = sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
+                name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
                 while True:
-                    if servers.count_documents({'voice_name': serveur_dict[0][0], "ban_players":{"$in":[member.id]}}) == 1:
-                        serveur_dict = sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
-                    if servers.count_documents({'voice_name': serveur_dict[0][0], "private": True}) == 1:
-                        serveur_dict = sorted(serveur_dict.items(), key = lambda x: x[1], reverse = True)
+                    if servers.count_documents({'voice_name': name_dict[0][0], "ban_players":{"$in":[member.id]}}) == 1:
+                        name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
+                    if servers.count_documents({'voice_name': name_dict[0][0], "private": True}) == 1:
+                        name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
                     else: break
-                await member.add_roles(discord.utils.get(member.guild.roles, name = serveur_dict[0][0]))
-                servers.update_one({'voice_name': serveur_dict[0][0], 'finished': None}, {'$push': {'current_players': member.name}})
-                await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = serveur_dict[0][0]))
+                await member.add_roles(discord.utils.get(member.guild.roles, name = name_dict[0][0]))
+                servers.update_one({'voice_name': name_dict[0][0], 'finished': None}, {'$push': {'current_players': member.name}})
+                await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = name_dict[0][0]))
                 await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
                 waiting_auto.remove(member.name)
         except: pass
         
         #rejoindre un serveur manuellement
         try:
-          if after.channel.name in server_dict.keys() and servers.count_documents({"finished": None, "current_players":{"$in":[member.name]}}) == 0:
+          if after.channel.name in name_list and servers.count_documents({"finished": None, "current_players":{"$in":[member.name]}}) == 0:
               waiting_join.append(member.name)
               if waiting_join[0] != member.name:
                   await asyncio.sleep(waiting_join.index(member.name)*2)
 
-              if servers.count_documents({'voice_name': serveur_dict[0][0], 'finished': None, "ban_players":{"$in":[member.id]}}) == 1:
+              if servers.count_documents({'voice_name': name_dict[0][0], 'finished': None, "ban_players":{"$in":[member.id]}}) == 1:
                   await member.edit(voice_channel = None)
               await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
               await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
@@ -135,11 +135,6 @@ class VoiceUpdate(commands.Cog):
         #créé un serveur
         global waiting_list
         try:
-            try:
-                if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO") and before.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-                    await member.send("Vous avez déjà créé un channel il y a peu, veuillez patienter 15 secondes.")
-                    await asyncio.sleep(15)
-            except: pass
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
                 if member.name not in waiting_create:
                     waiting_create.append(member.name)
@@ -153,8 +148,8 @@ class VoiceUpdate(commands.Cog):
 
                     count = 0
                     for i in server_list:
-                        while i['voice_name'] == list(server_dict.keys())[count]: count += 1
-                    channel_name = list(server_dict.keys())[count]
+                        while i['voice_name'] == list(name_list)[count]: count += 1
+                    channel_name = list(name_list)[count]
 
                     open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
                     cat_chat = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_TEXT_CHAT"))
