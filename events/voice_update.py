@@ -183,7 +183,7 @@ class VoiceUpdate(commands.Cog):
                         await asyncio.sleep(1)
                         print(waiting_dict[member.name], int(time.time()))
                     waiting_dict.pop(member.name)
-                    await member.edit(voice_channel = None)
+                    await member.edit(voice_channel = voice)
         except: pass
                 
 def setup(bot):
