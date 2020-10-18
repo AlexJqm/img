@@ -116,19 +116,14 @@ class VoiceUpdate(commands.Cog):
         
         #rejoindre un serveur manuellement
         try:
-          if after.channel.name in name_list and servers.count_documents({"finished": None, "current_players":{"$in":[member.name]}}) == 0:
+          if after.channel.name in name_list:
               waiting_join.append(member.name)
               if waiting_join[0] != member.name:
                   await asyncio.sleep(waiting_join.index(member.name)*2)
-
               if servers.count_documents({'voice_name': name_dict[0][0], 'finished': None, "ban_players":{"$in":[member.id]}}) == 1:
                   await member.edit(voice_channel = None)
               await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
               await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
-              if servers.count_documents({"current_players":{"$in":[member.name]}}) == 0:
-                  servers.update_one({'voice_name': after.channel.name, 'finished': None}, {'$push': {'current_players': member.name}})
-              else: pass
-
               waiting_join.remove(member.name)
         except: pass
         
@@ -136,12 +131,10 @@ class VoiceUpdate(commands.Cog):
         global waiting_list
         try:
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-                if member.name not in waiting_create:
-                    waiting_create.append(member.name)
-                    if waiting_create[0] != member.name:
-                        await asyncio.sleep(waiting_create.index(member.name)*5)
-
-                    data = servers.find({'finished': None})
+                if servers.find({'host_id': member.id}) == 1:
+                    await asyncio.sleep(15)
+                else:
+                    data = servers.find({})
 
                     server_list = []
                     for i in data: server_list.append(i)
@@ -179,10 +172,12 @@ class VoiceUpdate(commands.Cog):
                         _id = id,
                         host_id = member.id,
                         voice_id = voice.id,
+                        voice_name = voice.name,
                         text_id = text.id,
                         private = False,
                         code = None,
-                        region = None
+                        region = None,
+                        banned = []
                     )
                     json_data = json.loads(db_server.to_json())
                     result = servers.insert_one(json_data)
