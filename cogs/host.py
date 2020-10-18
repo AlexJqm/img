@@ -54,7 +54,7 @@ class Host(commands.Cog):
 
                     if member in voice.members:
                         await member.edit(voice_channel = None)
-                        servers.update_one({'voice_name': voice.name, 'finished': None}, {'$push': {'ban_players': member.id}})
+                        servers.update_one({'voice_name': voice.name}, {'$push': {'banned': member.id}})
                         await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a banni {member.mention} du serveur.", color = 0x26f752))
                         await logs.send(f"ℹ️ L'hôte {ctx.message.author.mention} a banni {member.mention} du serveur {voice.name}.")
                     else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Le joueur n'est pas dans le serveur.", color = 0xF73F26))
@@ -72,11 +72,11 @@ class Host(commands.Cog):
             find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
             role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
             voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
-            data = servers.find({'voice_name': voice.name, 'finished': None})
+            data = servers.find({'voice_name': voice.name})
             server = {}
             for i in data: server = i
             if server['private'] == False:
-                servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'private': True}})
+                servers.update_one({'voice_name': voice.name}, {"$set": {'private': True}})
                 role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Crewmate")
                 await voice.set_permissions(role_membre, connect = True, view_channel = False)
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a passé le serveur en privé.", color = 0x26f752))
@@ -94,11 +94,11 @@ class Host(commands.Cog):
             find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
             role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
             voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
-            data = servers.find({'voice_name': voice.name, 'finished': None})
+            data = servers.find({'voice_name': voice.name})
             server = {}
             for i in data: server = i
             if server['private'] == True:
-                servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'private': False}})
+                servers.update_one({'voice_name': voice.name}, {"$set": {'private': False}})
                 role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Crewmate")
                 await voice.set_permissions(role_membre, connect = True, view_channel = True)
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a passé le serveur en publique.", color = 0x26f752))
@@ -115,7 +115,7 @@ class Host(commands.Cog):
                 find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
-                servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'code': arg.upper()}})
+                servers.update_one({'voice_name': voice.name}, {"$set": {'code': arg.upper()}})
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez saisir le code: `!setcode BBHF`", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
     
@@ -128,7 +128,7 @@ class Host(commands.Cog):
                 find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
-                servers.update_one({'voice_name': voice.name, 'finished': None}, {"$set": {'region': arg.upper()}})
+                servers.update_one({'voice_name': voice.name}, {"$set": {'region': arg.upper()}})
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez saisir la region: `!setregion EU`", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
     
