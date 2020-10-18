@@ -151,6 +151,15 @@ class VoiceUpdate(commands.Cog):
 
                     await logs.send(f"🟢 Le joueur {member.mention} a créé le serveur {voice.name}.")
 
+                    embed = discord.Embed(title = "Les commandes hôtes", description = f"{member.mention}\n\n**!kick** *(alias: !k)*\nExclut un joueur du serveur.\nExemple: `!kick @pseudo`", color = 0x26f752)
+                    embed.add_field(name = "\u200B", value = "**!ban** *(alias: !b)*\nBannie un joueur du serveur.\nExemple: `!ban @pseudo`", inline = False)
+                    embed.add_field(name = "\u200B", value = "**!private** *(alias: !pv)*\nRend le serveur invisible et inaccessible à tout le monde.\nExemple: `!private`", inline = False)
+                    embed.add_field(name = "\u200B", value = "**!public** *(alias: !pu)*\nRend le serveur visible et accessible.\nExemple: `!public`", inline = False)
+                    embed.add_field(name = "\u200B", value = "**!setcode** *(alias: !sc)*\nInsert le code du serveur dans les informations.\nExemple: `!setcode BBHF`", inline = False)
+                    embed.add_field(name = "\u200B", value = "**!setregion** *(alias: !sr)*\nInsert la region du serveur dans les informations.\nExemple: `!setregion EU`", inline = False)
+                    embed.add_field(name = "\u200B", value = "**!help user**\nAffiche les commandes utilisateurs.\nExemple: `!help user`", inline = False)
+                    await text.send(embed = embed)
+                    
                     id = servers.count_documents({}) + 1
                     db_server = Server(
                         _id = id,
@@ -168,7 +177,7 @@ class VoiceUpdate(commands.Cog):
                 else:
                     if waiting_dict[member.name] >= int(time.time()):
                         time_left = waiting_dict[member.name] - int(time.time())
-                        await text.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous avez créé un autre serveur il y a moins de 30 secondes.\n**Merci de patienter encore {time_left} secondes avant de créer un nouveau serveur.**", color = 0xF73F26))
+                        await member.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous avez créé un autre serveur il y a moins de 30 secondes.\n**Merci de patienter encore {time_left} secondes avant de créer un nouveau serveur.**", color = 0xF73F26))
                         await member.edit(voice_channel = None)
                     while waiting_dict[member.name] >= int(time.time()):
                         await asyncio.sleep(1)
