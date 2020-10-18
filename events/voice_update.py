@@ -16,6 +16,7 @@ load_dotenv(dotenv_path)
 
 servers = db_connect()
 name_list = ['Alfa','Bravo','Charlie','Delta','Echo','Foxtrot','Golf','Hotel','India','Juliett','Kilo','Lima','Mike','November','Oscar','Papa','Quebec','Romeo','Sierra','Tango','Uniform','Victor','Whiskey','X-ray','Yankee','Zulu']
+waiting_dict = {}
 
 class VoiceUpdate(commands.Cog):
     def __init__(self, bot):
@@ -46,8 +47,13 @@ class VoiceUpdate(commands.Cog):
                 await voice.edit(position = name_dict.index(key))
         except: pass
         
-        #rejoindre un serveur automatiquement
+        #rejoindre un serveur
         try:
+            if after.channel.name in name_list:
+                if servers.count_documents({'voice_name': after.channel.name, "banned":{"$in":[member.id]}}) == 1:
+                    await member.edit(voice_channel = None)
+                await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
+                await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
             if after.channel.name == os.getenv("NAME_VOC_JOIN_AUTO"):
                 name_dict = {}
                 for key in name_list:
@@ -65,28 +71,18 @@ class VoiceUpdate(commands.Cog):
                         name_dict = sorted(name_dict.items(), key = lambda x: x[1], reverse = True)
                     else: break
                 await member.add_roles(discord.utils.get(member.guild.roles, name = name_dict[0][0]))
-                servers.update_one({'voice_name': name_dict[0][0]}, {'$push': {'current_players': member.name}})
                 await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = name_dict[0][0]))
                 await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
         except: pass
-        
-        #rejoindre un serveur manuellement
-        try:
-              if after.channel.name in name_list:
-                if servers.count_documents({'voice_name': after.channel.name, "banned":{"$in":[member.id]}}) == 1:
-                    await member.edit(voice_channel = None)
-                await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
-                await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
-        except: pass
-        
+
         #créé un serveur
         global waiting_list
         try:
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
-                if before.channel != None and servers.count_documents({'host_id': member.id}) != 0:
-                    print('hh')
-                    await member.edit(voice_channel = None)
-                    await asyncio.sleep(15)
+                if member.name in waiting_dict.key():
+                    while waiting_dict[member.name] >= int(time.time()):
+                        pass
+                waiting_dict[member.name] = int(time.time()) + 30
                 data = servers.find({})
                 server_list = []
                 for i in data: server_list.append(i)
