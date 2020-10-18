@@ -165,15 +165,16 @@ class VoiceUpdate(commands.Cog):
                     )
                     json_data = json.loads(db_server.to_json())
                     result = servers.insert_one(json_data)
-                if member.name in waiting_dict.keys():
+                else:
                     if waiting_dict[member.name] >= int(time.time()):
                         time_left = waiting_dict[member.name] - int(time.time())
-                        await member.send(f"Merci de patientez {time_left} secondes avant de créer un nouveau serveur.")
+                        await text.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous avez créé un autre serveur il y a moins de 30 secondes.\n**Merci de patienter encore {time_left} secondes avant de créer un nouveau serveur.**", color = 0xF73F26))
                         await member.edit(voice_channel = None)
                     while waiting_dict[member.name] >= int(time.time()):
                         await asyncio.sleep(1)
                         print(waiting_dict[member.name], int(time.time()))
                     waiting_dict.pop(member.name)
+                    await member.edit(voice_channel = None)
         except: pass
                 
 def setup(bot):
