@@ -201,12 +201,12 @@ class Utils(commands.Cog):
         await ctx.send('Hello', file=discord.File('welcomeimage.png'))
         
     @commands.command(pass_context = True)
-    async def vcmembers(self, ctx):
+    async def total(self, ctx):
         total = 0
         for channel in ctx.message.author.guild.voice_channels:
             print(channel.members)
             total += len(channel.members)
-        print(total)
+        await ctx.send(total)
         
 def setup(bot):
     bot.add_cog(Utils(bot))
