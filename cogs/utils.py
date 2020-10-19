@@ -5,9 +5,7 @@ from discord.ext import commands
 from os.path import join, dirname
 from dotenv import load_dotenv
 from database.connect import db_connect
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import requests
 
 dotenv_path = join(dirname(__file__), '.env')
@@ -166,30 +164,44 @@ class Utils(commands.Cog):
             
     @commands.command(pass_context=True)
     async def test(self, ctx, member: discord.Member = None):
-        img = Image.open("infoimgimg.png") #Replace infoimgimg.png with your background image.
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("Modern_Sans_Light.otf", 100) #Make sure you insert a valid font from your folder.
-        fontbig = ImageFont.truetype("Fitamint Script.ttf", 400) #Make sure you insert a valid font from your folder.
-        
+        # Saves the Profile Picture as a file for PIL to edit it.
         with requests.get(member.avatar_url) as r:
             img_data = r.content
         with open('profile.jpg', 'wb') as handler:
             handler.write(img_data)
+        im1 = Image.open("background.png")
         im2 = Image.open("profile.jpg")
-        
-        
-        #    (x,y)::↓ ↓ ↓ (text)::↓ ↓     (r,g,b)::↓ ↓ ↓
-        print(member.name)
-        draw.text((200, 0), "Information:", (255, 255, 255), font=fontbig) #draws Information
-        draw.text((50, 500), "Username: {}".format(member.name), (255, 255, 255), font=font) #draws the Username of the user
-        draw.text((50, 700), "ID:  {}".format(member.id), (255, 255, 255), font=font) #draws the user ID
-        draw.text((50, 900), "User Status:{}".format(member.status), (255, 255, 255), font=font) #draws the user status
-        draw.text((50, 1100), "Account created: {}".format(member.created_at), (255, 255, 255), font=font) #When the account was created 
-        draw.text((50, 1300), "Nickname:{}".format(member.display_name), (255, 255, 255), font=font) # Nickname of the user
-        draw.text((50, 1500), "Users' Top Role:{}".format(member.top_role), (255, 255, 255), font=font) #draws the top rome
-        draw.text((50, 1700), "User Joined:{}".format(member.joined_at), (255, 255, 255), font=font) #draws info about when the user joined
-        img.save('infoimg2.png') #Change infoimg2.png if needed.
-        await ctx.send('Hello', file=discord.File('infoimg2.png', 'profile.jpg'))
 
+        # Font Stuff
+        draw = ImageDraw.Draw(im1)
+        font = ImageFont.truetype("BebasNeue-Regular.ttf", 32)
+        # Add the Text to the result image
+        guild = bot.get_guild(guild_id)
+        draw.text((160, 40),f"Welcome {member.name}",(255,255,255),font=font)
+        draw.text((160, 80),f"You are the {guild.member_count}th member",(255,255,255),font=font)
+
+        size = 129
+
+        im2 = im2.resize((size, size), resample=0)
+        # Creates the mask for the profile picture
+        mask_im = Image.new("L", im2.size, 0)
+        draw = ImageDraw.Draw(mask_im)
+        draw.ellipse((0, 0, size, size), fill=255)
+
+        mask_im.save('mask_circle.png', quality=95)
+
+        # Masks the profile picture and adds it to the background.
+        back_im = im1.copy()
+        back_im.paste(im2, (11, 11), mask_im)
+
+
+        back_im.save('welcomeimage.png', quality=95)
+        # Stuff to send the embed with a local image.
+        f = discord.File(path, filename="welcomeimage.png")
+
+        embed = discord.Embed()
+        embed.set_image(url="attachment://welcomeimage.png")
+        
+        await ctx.send(embed = embed)
 def setup(bot):
     bot.add_cog(Utils(bot))
