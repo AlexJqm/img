@@ -163,9 +163,9 @@ class Utils(commands.Cog):
             
             
     @commands.command(pass_context=True)
-    async def test(self, ctx, member: discord.Member = None):
+    async def test(self, ctx, guild_id = None):
         # Saves the Profile Picture as a file for PIL to edit it.
-        with requests.get(member.avatar_url) as r:
+        with requests.get(ctx.message.author.avatar_url) as r:
             img_data = r.content
         with open('profile.jpg', 'wb') as handler:
             handler.write(img_data)
@@ -174,11 +174,11 @@ class Utils(commands.Cog):
 
         # Font Stuff
         draw = ImageDraw.Draw(im1)
-        font = ImageFont.truetype("BebasNeue-Regular.ttf", 32)
+        font = ImageFont.truetype("Modern_Sans_Light.otf", 32)
         # Add the Text to the result image
-        guild = bot.get_guild(guild_id)
-        draw.text((160, 40),f"Welcome {member.name}",(255,255,255),font=font)
-        draw.text((160, 80),f"You are the {guild.member_count}th member",(255,255,255),font=font)
+        guild = self.bot.get_guild(guild_id)
+        draw.text((160, 40),f"Welcome {ctx.message.author.name}",(255,255,255),font=font)
+        draw.text((160, 80),f"You are the {ctx.message.author.guild.member_count}th member",(255,255,255),font=font)
 
         size = 129
 
@@ -197,11 +197,8 @@ class Utils(commands.Cog):
 
         back_im.save('welcomeimage.png', quality=95)
         # Stuff to send the embed with a local image.
-        f = discord.File(path, filename="welcomeimage.png")
 
-        embed = discord.Embed()
-        embed.set_image(url="attachment://welcomeimage.png")
+        await ctx.send('Hello', file=discord.File('welcomeimage.png'))
         
-        await ctx.send(embed = embed)
 def setup(bot):
     bot.add_cog(Utils(bot))
