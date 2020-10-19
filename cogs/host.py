@@ -55,7 +55,7 @@ class Host(commands.Cog):
                     if member in voice.members:
                         await member.edit(voice_channel = None)
                         servers.update_one({'voice_name': voice.name}, {'$push': {'banned': member.id}})
-                        
+                        await voice.set_permissions(member, connect = False, view_channel = False)
                         await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a banni {member.mention} du serveur.", color = 0x26f752))
                         await logs.send(f"ℹ️ L'hôte {ctx.message.author.mention} a banni {member.mention} du serveur {voice.name}.")
                     else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Le joueur n'est pas dans le serveur.", color = 0xF73F26))
