@@ -203,12 +203,9 @@ class Utils(commands.Cog):
     @commands.command(pass_context = True)
     async def vcmembers(self, ctx):
         total = 0
-        for channel in ctx.message.author.guild.channels:
-            try:
-                print(channel)
-                tmp = discord.utils.get(ctx.message.author.guild.channels, name = channel)
-                total += len(tmp.voice_members)
-            except: pass
+        for channel in ctx.message.author.guild.voice_channels:
+            print(channel.members)
+            total += len(channel.members)
         print(total)
         
 def setup(bot):
