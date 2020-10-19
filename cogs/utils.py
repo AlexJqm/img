@@ -5,6 +5,9 @@ from discord.ext import commands
 from os.path import join, dirname
 from dotenv import load_dotenv
 from database.connect import db_connect
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -152,7 +155,7 @@ class Utils(commands.Cog):
         await ctx.guild.create_voice_channel('Rejoindre un serveur', category = cat_server)
         
     @commands.command(pass_context = True)
-    async def tt(self, ctx):
+    async def movebot(self, ctx):
         await ctx.channel.purge(limit = 1)
         channel = ctx.message.author.voice.channel
         voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
@@ -161,7 +164,7 @@ class Utils(commands.Cog):
             
             
     @commands.command(pass_context=True)
-    async def info(ctx, user: discord.Member):
+    async def test(ctx, user: discord.Member):
         img = Image.open("infoimgimg.png") #Replace infoimgimg.png with your background image.
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("Modern_Sans_Light.otf", 100) #Make sure you insert a valid font from your folder.
@@ -176,7 +179,7 @@ class Utils(commands.Cog):
         draw.text((50, 1500), "Users' Top Role:{}".format(user.top_role), (255, 255, 255), font=font) #draws the top rome
         draw.text((50, 1700), "User Joined:{}".format(user.joined_at), (255, 255, 255), font=font) #draws info about when the user joined
         img.save('infoimg2.png') #Change infoimg2.png if needed.
-        await selfclient.upload("infoimg2.png")
+        await self.bot.upload("infoimg2.png")
 
 def setup(bot):
     bot.add_cog(Utils(bot))

@@ -6,3 +6,4 @@ dataclasses
 python-dotenv
 flask
 PyNaCl
+Pillow
