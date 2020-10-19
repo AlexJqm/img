@@ -177,7 +177,8 @@ class VoiceUpdate(commands.Cog):
                 else:
                     if waiting_dict[member.name] >= int(time.time()):
                         time_left = waiting_dict[member.name] - int(time.time())
-                        await member.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous avez créé un autre serveur il y a moins de 30 secondes.\n**Merci de patienter encore {time_left} secondes avant de créer un nouveau serveur.**", color = 0xF73F26))
+                        try: await member.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous avez créé un autre serveur il y a moins de 30 secondes.\n**Merci de patienter encore {time_left} secondes avant de créer un nouveau serveur.**", color = 0xF73F26))
+                        except: pass
                         await member.edit(voice_channel = None)
                     while waiting_dict[member.name] >= int(time.time()):
                         await asyncio.sleep(1)
