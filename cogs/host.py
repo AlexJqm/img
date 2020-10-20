@@ -33,7 +33,7 @@ class Host(commands.Cog):
                         await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a kické {member.mention} du serveur.", color = 0x26f752))
                     else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Le joueur n'est pas dans le serveur.", color = 0xF73F26))
                 else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous ne pouvez pas kick un modérateur.", color = 0xF73F26))
-            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `!kick @pseudo`", color = 0xF73F26))
+            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `.kick @pseudo`", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
 
     @commands.command(pass_context = True, aliases=['b'])
@@ -56,7 +56,7 @@ class Host(commands.Cog):
                         await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a banni {member.mention} du serveur.", color = 0x26f752))
                     else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Le joueur n'est pas dans le serveur.", color = 0xF73F26))
                 else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous ne pouvez pas bannir un modérateur.", color = 0xF73F26))
-            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `!ban @pseudo`", color = 0xF73F26))
+            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `.ban @pseudo`", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
 
     @commands.command(pass_context = True, aliases=['pv'])
@@ -109,7 +109,7 @@ class Host(commands.Cog):
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
                 servers.update_one({'voice_name': voice.name}, {"$set": {'code': arg.upper()}})
-            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez saisir le code: `!setcode BBHF`", color = 0xF73F26))
+            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez saisir le code: `.setcode BBHF`", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
     
     @commands.command(pass_context = True, aliases=['sr'])
@@ -122,7 +122,7 @@ class Host(commands.Cog):
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
                 servers.update_one({'voice_name': voice.name}, {"$set": {'region': arg.upper()}})
-            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez saisir la region: `!setregion EU`", color = 0xF73F26))
+            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez saisir la region: `.setregion EU`", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
     
     @commands.command(pass_context = True, aliases=['s'])
