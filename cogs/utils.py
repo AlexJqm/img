@@ -169,5 +169,13 @@ class Utils(commands.Cog):
             total += len(channel.members)
         await ctx.send(total)
         
+    @commands.command(pass_context = True)
+    async def delete(self, ctx, id = None):
+        total = 0
+        for channel in ctx.message.author.guild.voice_channels:
+            print(channel.members)
+            total += len(channel.members)
+        await ctx.send(total)    
+    
 def setup(bot):
     bot.add_cog(Utils(bot))
