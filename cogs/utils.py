@@ -142,16 +142,6 @@ class Utils(commands.Cog):
             voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
             if voice and voice.is_connected(): await voice.move_to(channel)
             else: voice = await channel.connect()
-              
-    @commands.command(pass_context = True)
-    async def setup(self, ctx):
-        await ctx.channel.purge(limit = 1)
-        cat_server = await ctx.guild.create_category_channel('Serveurs')
-        await ctx.guild.create_category_channel('Chat serveur')
-        await ctx.guild.create_category_channel('Serveurs disponibles')
-        await ctx.guild.create_category_channel('Serveurs complets')
-        await ctx.guild.create_voice_channel('Creer un serveur', category = cat_server)
-        await ctx.guild.create_voice_channel('Rejoindre un serveur', category = cat_server)
         
     @commands.command(pass_context = True)
     async def movebot(self, ctx):
@@ -174,6 +164,18 @@ class Utils(commands.Cog):
         text = discord.utils.get(ctx.message.author.guild.channels, name = name)
         print(text)
         await text.delete()
+    
+    @commands.command(pass_context = True)
+    async def total(self, ctx):
+        total = 0
+        for channel in ctx.message.author.guild.voice_channels:
+            total += len(channel.members)
+        await ctx.send(total)
+    
+    
+    @commands.command(pass_context = True)
+    async def find(self, ctx, member: discord.Member = None):
+        await ctx.send(member.joined_at)
     
 def setup(bot):
     bot.add_cog(Utils(bot))
