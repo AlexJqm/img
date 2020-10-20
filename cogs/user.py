@@ -105,7 +105,6 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['inv'])
     async def invite(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
         role = discord.utils.get(member.guild.roles, name = find_role[0])  
         voice = discord.utils.get(member.guild.channels, name = role.name)
@@ -120,7 +119,6 @@ class User(commands.Cog):
                     link = await voice.create_invite()
                     await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us France.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0xF73F26))
                     await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"Le joueur {ctx.message.author.mention} a invité {member.mention} à rejoindre le serveur.", color = 0x26f752))
-                    await logs.send(f"ℹ️ Le joueur {ctx.message.author.mention} a invité {member.mention} dans {voice.name}.")
                 except:
                     await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous devez être dans un serveur pour inviter une personne.", color = 0xF73F26))
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `!invite @pseudo`", color = 0xF73F26))
@@ -129,7 +127,6 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['vh'])
     async def votehost(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         if member is not None:
             find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
             role = discord.utils.get(member.guild.roles, name = find_role[0])  
@@ -147,7 +144,6 @@ class User(commands.Cog):
             find_role = [role.name for role in new_host.roles if role.name == "Hote"]
             
             if "Hote" not in find_role:
-                await logs.send(f"ℹ️ Le joueur {ctx.message.author.mention} a lancé un vote pour élire {new_host.mention} comme nouvel hôte du serveur {voice.name}.")
                 
                 def check_react(reaction, user):
                     if reaction.message.id != msg.id: return False

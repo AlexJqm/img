@@ -24,7 +24,6 @@ class VoiceUpdate(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        logs = discord.utils.get(member.guild.channels, name = "⛔astronaute-logs")
         
         #position des vocaux par rapport au nombre de joueurs décroissants
         try:
@@ -32,11 +31,11 @@ class VoiceUpdate(commands.Cog):
             for key in name_list:
                 try:
                     voice = discord.utils.get(member.guild.channels, name = key)
-                    if voice.name is not None and len(voice.members) < 2:
+                    if voice.name is not None and len(voice.members) < 10:
                         name_dict[voice.name] = len(voice.members)
                         open_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_OPEN"))
                         await voice.edit(category = open_server)
-                    if voice.name is not None and len(voice.members) == 2:
+                    if voice.name is not None and len(voice.members) == 10:
                         full_server = discord.utils.get(member.guild.categories, name = os.getenv("NAME_CAT_SERV_FULL"))
                         await voice.edit(category = full_server)
                 except: pass
@@ -60,7 +59,6 @@ class VoiceUpdate(commands.Cog):
                     await text.delete()
                     await role.delete()
                     await member.remove_roles(role_host)
-                    await logs.send(f"🔴 Le serveur {voice.name} a été supprimé.")
                     
         #quitté un serveur
         try:
@@ -79,10 +77,8 @@ class VoiceUpdate(commands.Cog):
                     new_host = voice.members[randrange(len(voice.members))]
                     await new_host.add_roles(role_host)
                     servers.update_one({'voice_id': voice.id}, {"$set": {'host_id': new_host.id}})
-                    await logs.send(f"🟢 Le joueur {new_host.mention} a été designer par défaut comme nouvel hôte du serveur {voice.name}.")
                     await text.send(embed = discord.Embed(title = f"ℹ️ Serveur {text.name.capitalize()}", description = f"Le joueur {new_host.mention} à été designer par défaut comme nouvel hôte du serveur {text.name.capitalize()}.", color = 0x26f752))
                 await member.remove_roles(role, role_host)
-                await logs.send(f"🔴 Le joueur {member.mention} a quitté le serveur {voice.name}.")
         except: pass
         
         #rejoindre un serveur
@@ -91,7 +87,6 @@ class VoiceUpdate(commands.Cog):
                 if servers.count_documents({'voice_name': after.channel.name, "banned":{"$in":[member.id]}}) == 1:
                     await member.edit(voice_channel = None)
                 await member.add_roles(discord.utils.get(member.guild.roles, name = after.channel.name))
-                await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
             if after.channel.name == os.getenv("NAME_VOC_JOIN_AUTO"):
                 name_dict = {}
                 for key in name_list:
@@ -110,12 +105,10 @@ class VoiceUpdate(commands.Cog):
                     else: break
                 await member.add_roles(discord.utils.get(member.guild.roles, name = name_dict[0][0]))
                 await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = name_dict[0][0]))
-                await logs.send(f"🟢 Le joueur {member.mention} a rejoint le serveur {after.channel.name}.")
         except: pass
 
         #créé un serveur
         global waiting_dict
-        print(waiting_dict)
         try:
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
                 if member.name not in waiting_dict.keys():
@@ -148,8 +141,6 @@ class VoiceUpdate(commands.Cog):
 
                     await member.add_roles(role_chan, role_host)
                     await member.edit(voice_channel = discord.utils.get(member.guild.channels, name = channel_name))
-
-                    await logs.send(f"🟢 Le joueur {member.mention} a créé le serveur {voice.name}.")
 
                     embed = discord.Embed(title = "Les commandes hôtes", description = f"{member.mention}\n\n**!kick** *(alias: !k)*\nExclut un joueur du serveur.\nExemple: `!kick @pseudo`", color = 0x26f752)
                     embed.add_field(name = "\u200B", value = "**!ban** *(alias: !b)*\nBannie un joueur du serveur.\nExemple: `!ban @pseudo`", inline = False)

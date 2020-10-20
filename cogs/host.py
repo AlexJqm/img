@@ -19,7 +19,6 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['k'])
     async def kick(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
         
         if 'Hote' in role:
@@ -32,7 +31,6 @@ class Host(commands.Cog):
                     if member in voice.members:
                         await member.edit(voice_channel = None)
                         await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a kické {member.mention} du serveur.", color = 0x26f752))
-                        await logs.send(f"ℹ️ L'hôte {ctx.message.author.mention} a kické {member.mention} du serveur {voice.name}.")
                     else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Le joueur n'est pas dans le serveur.", color = 0xF73F26))
                 else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous ne pouvez pas kick un modérateur.", color = 0xF73F26))
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `!kick @pseudo`", color = 0xF73F26))
@@ -41,7 +39,6 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['b'])
     async def ban(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
@@ -57,7 +54,6 @@ class Host(commands.Cog):
                         servers.update_one({'voice_name': voice.name}, {'$push': {'banned': member.id}})
                         await voice.set_permissions(member, connect = False, view_channel = False)
                         await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a banni {member.mention} du serveur.", color = 0x26f752))
-                        await logs.send(f"ℹ️ L'hôte {ctx.message.author.mention} a banni {member.mention} du serveur {voice.name}.")
                     else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Le joueur n'est pas dans le serveur.", color = 0xF73F26))
                 else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous ne pouvez pas bannir un modérateur.", color = 0xF73F26))
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `!ban @pseudo`", color = 0xF73F26))
@@ -66,7 +62,6 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['pv'])
     async def private(self, ctx):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
@@ -81,14 +76,12 @@ class Host(commands.Cog):
                 role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Crewmate")
                 await voice.set_permissions(role_membre, connect = True, view_channel = False)
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a passé le serveur en privé.", color = 0x26f752))
-                await logs.send(f"🟢 L'hôte {ctx.message.author.mention} a rendu le serveur {voice.name} privé.")
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Votre serveur est déjà privé.", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
 
     @commands.command(pass_context = True, aliases=['pu'])
     async def public(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        logs = discord.utils.get(ctx.message.author.guild.channels, name = "⛔astronaute-logs")
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
@@ -103,7 +96,6 @@ class Host(commands.Cog):
                 role_membre = discord.utils.get(ctx.message.author.guild.roles, name = "Crewmate")
                 await voice.set_permissions(role_membre, connect = True, view_channel = True)
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"L'hôte {ctx.message.author.mention} a passé le serveur en publique.", color = 0x26f752))
-                await logs.send(f"🟢 L'hôte {ctx.message.author.mention} a rendu le serveur {voice.name} publique.")
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Votre serveur est déjà publique.", color = 0xF73F26))
         else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
 
