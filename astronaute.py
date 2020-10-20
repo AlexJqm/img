@@ -5,11 +5,6 @@ from discord.ext import commands
 bot = commands.Bot(command_prefix='.')
 bot.remove_command('help')
 
-for file in os.listdir("events"):
-    if file.endswith(".py"):
-        name = file[:-3]
-        bot.load_extension(f"events.{name}")
-
 for file in os.listdir("cogs"):
     if file.endswith(".py"):
         name = file[:-3]

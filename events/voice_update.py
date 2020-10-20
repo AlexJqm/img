@@ -109,6 +109,7 @@ class VoiceUpdate(commands.Cog):
 
         #créé un serveur
         global waiting_dict
+        print(waiting_dict)
         try:
             if after.channel.name == os.getenv("NAME_VOC_CREATE_AUTO"):
                 if member.name not in waiting_dict.keys():
