@@ -208,9 +208,9 @@ class User(commands.Cog):
     async def help(self, ctx, arg = None):
         await ctx.channel.purge(limit = 1)
         if arg == 'user':
-            embed = discord.Embed(title = "Les commandes utilisateurs", description = "**!info** *(alias: !i)*\nAffiche les informations à propos d'un serveur.\nExemple: `!info alfa`\nSi vous vous trouvez déjà dans un serveur, utiliser simplement `!info` pour afficher les informations de votre serveur.", color = 0x26f752)
-            embed.add_field(name = "\u200B", value = "**!whereis** *(alias: !wi)*\nRenvois la position du joueur s'il est dans un serveur.\nExemple: `!whereis @pseudo`", inline = False)
-            embed.add_field(name = "\u200B", value = "**!invite** *(alias: !inv)*\nEnvois une invitation en message privé à un joueur.\nExemple: `!invite @pseudo`", inline = False)
+            embed = discord.Embed(title = "Les commandes utilisateurs", description = "**.info** *(alias: .i)*\nAffiche les informations à propos d'un serveur.\nExemple: `.info alfa`\nSi vous vous trouvez déjà dans un serveur, utiliser simplement `.info` pour afficher les informations de votre serveur.", color = 0x26f752)
+            embed.add_field(name = "\u200B", value = "**.whereis** *(alias: .wi)*\nRenvois la position du joueur s'il est dans un serveur.\nExemple: `.whereis @pseudo`", inline = False)
+            embed.add_field(name = "\u200B", value = "**.invite** *(alias: .inv)*\nEnvois une invitation en message privé à un joueur.\nExemple: `!invite @pseudo`", inline = False)
             embed.add_field(name = "\u200B", value = "**!host**\nAffiche le nom de l'hôte du serveur dans lequel vous vous trouvez.\nExemple: `!host`", inline = False)
             embed.add_field(name = "\u200B", value = "**!votehost** *(alias: !vh)*\nLance un vote pour élire un nouvel hôte.\nExemple: `!votehost @pseudo`", inline = False)
             await ctx.send(embed = embed)
