@@ -178,10 +178,13 @@ class Utils(commands.Cog):
         await ctx.send(member.joined_at)
     
     @commands.command(pass_context = True)
-    async def exec(self, ctx, arg = None):
+    async def exec(self, ctx, *args):
+        arg = " ".join(args)
+        print(arg)
         out = subprocess.Popen(arg, shell=True, stdout=subprocess.PIPE)
         subprocess_return = out.stdout.read()
-        out = str(subprocess_return).replace("/", "\\")
+        out = str(subprocess_return)
+        out = out.replace('\\n', '\n').replace('\\t', '\t')
         await ctx.send(f"`{out[2:-1]}`")
     
 def setup(bot):
