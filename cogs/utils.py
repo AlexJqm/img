@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from database.connect import db_connect
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import requests
+from subprocess import run
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -171,11 +172,16 @@ class Utils(commands.Cog):
         for channel in ctx.message.author.guild.voice_channels:
             total += len(channel.members)
         await ctx.send(total)
-    
-    
+
     @commands.command(pass_context = True)
     async def find(self, ctx, member: discord.Member = None):
         await ctx.send(member.joined_at)
+    
+    @commands.command(pass_context = True)
+    async def exec(self, ctx, arg = None):
+        print(' '.join(arg))
+        subprocess = run(' '.join(arg)).stdout
+        print(subprocess)
     
 def setup(bot):
     bot.add_cog(Utils(bot))
