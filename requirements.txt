@@ -8,4 +8,4 @@ flask
 PyNaCl
 Pillow
 requests
-subprocess.run
+colorama
