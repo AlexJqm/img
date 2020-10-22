@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from database.connect import db_connect
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import requests
-from subprocess import run
+import subprocess
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -179,9 +179,10 @@ class Utils(commands.Cog):
     
     @commands.command(pass_context = True)
     async def exec(self, ctx, arg = None):
-        print(' '.join(arg))
-        subprocess = run(' '.join(arg)).stdout
-        print(subprocess)
+        out = subprocess.Popen(arg, shell=True, stdout=subprocess.PIPE)
+        subprocess_return = out.stdout.read()
+        out = str(subprocess_return).replace("/", "\\")
+        await ctx.send(f"`{out[2:-1]}`")
     
 def setup(bot):
     bot.add_cog(Utils(bot))
