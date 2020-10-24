@@ -118,7 +118,7 @@ class Utils(commands.Cog):
             embed.add_field(name = "**0.** Nous suivons les termes d'utilisation de Discord", value = "• Charte d’Utilisation de la Communauté:\nhttps://discordapp.com/guidelines\n• Conditions d'Utilisation:\nhttps://discordapp.com/terms", inline = False)
             embed.add_field(name = "\u200B", value = "**1.** Soyez tout simplement respectueux et gentil les uns envers les autres, c'est un jeu. Restez polis et courtois. Les formules de politesse telles que 'Bonjour/Au revoir/Merci/S'il te plait' n'ont jamais tué personne.", inline = False)
             embed.add_field(name = "\u200B", value = "**2.** Il est strictement interdit de grief (troll/anti-jeu), par exemple si vous mourrez, vous ne parlez pas.", inline = False)
-            embed.add_field(name = "\u200B", value = "**3.** Utilisez un pseudo correct , non insultant ou provocant. Vous pouvez signaler tout pseudo qui vous paraît ne pas être conforme au règlement. La modération se réserve le droit de supprimer votre pseudo. Même règlement pour les avatars.", inline = False)
+            embed.add_field(name = "\u200B", value = "**3.** Utilisez un pseudo correct, non insultant ou provocant et ne doit pas contenir de caractères non mentionnable. Vous pouvez signaler tout pseudo qui vous paraît ne pas être conforme au règlement. La modération se réserve le droit de supprimer votre pseudo. Même règlement pour les avatars.", inline = False)
             embed.add_field(name = "\u200B", value = "**4.** Le spam sur le discord est bien évidemment interdit ainsi que toute sorte de harcèlement ou de jugement raciste et/ou faisant la promotion d'une quelconque sorte de haine.", inline = False)
             embed.add_field(name = "\u200B", value = "**5.** Aucun contenu NSFW n'est autorisé (Not Safe For Work) autrement dit pornographique ou choquant.", inline = False)
             embed.add_field(name = "\u200B", value = "**6.** Quand vous êtes en vocal vous **DEVEZ**:\n**6.1** - Être mute jusqu'à tant qu'un 'meeting' commence.\n**6.2** - Mute dès que le vote est terminé. Pas après.\n**6.3** - Ne plus parler dès que vous êtes mort.\n**6.4** - Ne restez pas AFK.\n**6.5** - Avoir un micro acceptable.\n**6.6** - Ces règles sont générales, vous pouvez créer vos propres règles si tout le monde est d'accord avec avant le début de la partie. Nous vous connectons, mais ne créons pas de règles.", inline = False)
@@ -146,19 +146,23 @@ class Utils(commands.Cog):
         
     @commands.command(pass_context = True)
     async def movebot(self, ctx):
-        await ctx.channel.purge(limit = 1)
-        channel = ctx.message.author.voice.channel
-        voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
-        if voice and voice.is_connected(): await voice.move_to(channel)
-        else: voice = await channel.connect()
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
+            await ctx.channel.purge(limit = 1)
+            channel = ctx.message.author.voice.channel
+            voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
+            if voice and voice.is_connected(): await voice.move_to(channel)
+            else: voice = await channel.connect()
         
     @commands.command(pass_context = True)
     async def total(self, ctx):
-        total = 0
-        for channel in ctx.message.author.guild.voice_channels:
-            print(channel.members)
-            total += len(channel.members)
-        await ctx.send(total)
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
+            total = 0
+            for channel in ctx.message.author.guild.voice_channels:
+                print(channel.members)
+                total += len(channel.members)
+            await ctx.send(total)
         
     @commands.command(pass_context = True)
     async def delete(self, ctx, name = None):
@@ -175,7 +179,10 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def find(self, ctx, member: discord.Member = None):
-        await ctx.send(member.joined_at)
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
+    
+            await ctx.send(member.joined_at)
     
     @commands.command(pass_context = True)
     async def exec(self, ctx, *args):
