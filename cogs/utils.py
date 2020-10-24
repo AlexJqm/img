@@ -52,14 +52,13 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def stat(self, ctx):
-        while True:
-            count = 0
-            voice = self.bot.get_channel(769619638010773524)
-            for member in self.bot.get_all_members():
-                count += 1
-            print(count)
-            await voice.edit(name = f'Membre: {count}')
-            await asyncio.sleep(10)
+        count = 0
+        voice = self.bot.get_channel(769619638010773524)
+        for member in self.bot.get_all_members():
+            count += 1
+        print(count)
+        await voice.edit(name = f'Membre: {count}')
+
                   
     @commands.command(pass_context = True)
     async def stats(self, ctx):
