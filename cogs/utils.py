@@ -51,7 +51,7 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def stats(self, ctx):
-        online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.message.guild.members)
+        online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.guild.members)
         print(online_player)
         await ctx.channel.purge(limit=1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
@@ -65,7 +65,7 @@ class Utils(commands.Cog):
                             total_player += len(channel.members)
                     except: pass
                     pass
-                online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.message.guild.members)
+                online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.guild.members)
                 return(total_server, total_player, online_player)
             
             total_server, total_player, online_player = 0,0,0
@@ -104,16 +104,16 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def clear(self, ctx):
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
-        if 'Admin' in role or 'Security' in role:
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
+        if 'Admin' in role:
             await ctx.channel.purge()
 
     @commands.command(pass_context = True)
     async def rules(self, ctx, msgID: int):
         await ctx.channel.purge(limit = 1)
         msg = await ctx.fetch_message(msgID)
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
-        if 'Admin' in role or 'Security' in role:
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
+        if 'Admin' in role:
             embed = discord.Embed(title = "Les règles", description = "Le serveur Discord de Among Us Francophone est un lieu de vie commune où vous rencontrerez des joueurs / joueuses de tout âge et de tout horizon. Il est donc impératif de bien lire ce règlement pour éviter tout débordement. Nous sommes particulièrement attentifs et vigilants aux contenus proposés par les joueurs dans les channels textuels et émis dans les channels vocaux. Nous vous recommandons donc de faire attention a vos propos.", color = 0xf7f7f7)
             embed.add_field(name = "**0.** Nous suivons les termes d'utilisation de Discord", value = "• Charte d’Utilisation de la Communauté:\nhttps://discordapp.com/guidelines\n• Conditions d'Utilisation:\nhttps://discordapp.com/terms", inline = False)
             embed.add_field(name = "\u200B", value = "**1.** Soyez tout simplement respectueux et gentil les uns envers les autres, c'est un jeu. Restez polis et courtois. Les formules de politesse telles que 'Bonjour/Au revoir/Merci/S'il te plait' n'ont jamais tué personne.", inline = False)
@@ -160,39 +160,26 @@ class Utils(commands.Cog):
         if 'Admin' in role or 'Security' in role:
             total = 0
             for channel in ctx.message.author.guild.voice_channels:
-                print(channel.members)
                 total += len(channel.members)
             await ctx.send(total)
-        
-    @commands.command(pass_context = True)
-    async def delete(self, ctx, name = None):
-        text = discord.utils.get(ctx.message.author.guild.channels, name = name)
-        print(text)
-        await text.delete()
-    
-    @commands.command(pass_context = True)
-    async def total(self, ctx):
-        total = 0
-        for channel in ctx.message.author.guild.voice_channels:
-            total += len(channel.members)
-        await ctx.send(total)
 
     @commands.command(pass_context = True)
     async def find(self, ctx, member: discord.Member = None):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
-    
             await ctx.send(member.joined_at)
     
     @commands.command(pass_context = True)
-    async def exec(self, ctx, *args):
-        arg = " ".join(args)
-        print(arg)
-        out = subprocess.Popen(arg, shell=True, stdout=subprocess.PIPE)
-        subprocess_return = out.stdout.read()
-        out = str(subprocess_return)
-        out = out.replace('\\n', '\n').replace('\\t', '\t')
-        await ctx.send(f"`{out[2:-1]}`")
+    async def exec(self, ctx, *args):        
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
+        if 'Admin' in role:
+            arg = " ".join(args)
+            print(arg)
+            out = subprocess.Popen(arg, shell=True, stdout=subprocess.PIPE)
+            subprocess_return = out.stdout.read()
+            out = str(subprocess_return)
+            out = out.replace('\\n', '\n').replace('\\t', '\t')
+            await ctx.send(f"`{out[2:-1]}`")
     
 def setup(bot):
     bot.add_cog(Utils(bot))
