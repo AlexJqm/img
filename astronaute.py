@@ -2,6 +2,10 @@ import os
 import discord
 from discord.ext import commands
 from colorama import Fore, init
+intents = discord.Intents.default()
+intents.members = True
+intents.typing = False
+intents.presences = False
 
 bot = commands.Bot(command_prefix='.')
 bot.remove_command('help')
