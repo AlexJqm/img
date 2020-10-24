@@ -51,6 +51,10 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def stats(self, ctx):
+        for member in self.bot.get_all_members():
+            print(member)
+            if member.status != discord.Status.offline:
+                print(member.name, member.status)
         online_player = sum(member.status != discord.Status.offline and not member.bot for member in ctx.guild.members)
         print(online_player)
         await ctx.channel.purge(limit=1)
