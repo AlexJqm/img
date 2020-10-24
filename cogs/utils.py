@@ -1,6 +1,7 @@
 import discord
 import pymongo
 import os
+import asyncio
 from discord.ext import commands
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -49,6 +50,17 @@ class Utils(commands.Cog):
                 
                 if str(res.emoji) not in reactmoji: await msg.remove_reaction(res.emoji, user)
 
+    @commands.command(pass_context = True)
+    async def stat(self, ctx):
+        while True:
+            count = 0
+            voice = self.bot.get_channel(769619638010773524)
+            for member in self.bot.get_all_members():
+                count += 1
+            print(count)
+            await voice.edit(name = f'Membre: {count}')
+            await asyncio.sleep(10)
+                  
     @commands.command(pass_context = True)
     async def stats(self, ctx):
         for member in self.bot.get_all_members():
