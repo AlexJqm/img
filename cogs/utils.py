@@ -109,6 +109,7 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def clear(self, ctx):
+        await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
         if 'Admin' in role:
             await ctx.channel.purge()
@@ -166,9 +167,9 @@ class Utils(commands.Cog):
     
     @commands.command(pass_context = True)
     async def movebot(self, ctx):
+        await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
-            await ctx.channel.purge(limit = 1)
             channel = ctx.message.author.voice.channel
             voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
             if voice and voice.is_connected(): await voice.move_to(channel)
@@ -176,12 +177,14 @@ class Utils(commands.Cog):
 
     @commands.command(pass_context = True)
     async def joined_at(self, ctx, member: discord.Member = None):
+        await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
             await ctx.send(member.joined_at)
     
     @commands.command(pass_context = True)
-    async def exec(self, ctx, *args):        
+    async def exec(self, ctx, *args):   
+        await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
         if 'Admin' in role:
             arg = " ".join(args)
