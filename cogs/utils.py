@@ -51,15 +51,6 @@ class Utils(commands.Cog):
                 if str(res.emoji) not in reactmoji: await msg.remove_reaction(res.emoji, user)
 
     @commands.command(pass_context = True)
-    async def stat(self, ctx):
-        count = 0
-        voice = self.bot.get_channel(769619638010773524)
-        for member in self.bot.get_all_members():
-            count += 1
-        await voice.edit(name = f'Membre: {count}')
-
-                  
-    @commands.command(pass_context = True)
     async def stats(self, ctx):
         for member in self.bot.get_all_members():
             print(member, member.status)
@@ -149,7 +140,7 @@ class Utils(commands.Cog):
             await msg.edit(embed = embed)
             
     @commands.command(pass_context = True)
-    async def move(self, ctx, member: discord.Member = None, channel_id = None):
+    async def move(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
@@ -157,7 +148,16 @@ class Utils(commands.Cog):
             voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
             if voice and voice.is_connected(): await voice.move_to(channel)
             else: voice = await channel.connect()
-        
+    
+    @commands.command(pass_context = True)
+    async def go(self, ctx, channel_name = None):
+        await ctx.channel.purge(limit = 1)
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
+        if 'Admin' in role or 'Security' in role:
+            channel = discord.utils.get(ctx.guild.channels, name = channel_name.capitalize())
+            await ctx.edit(voice_channel = channel)
+    
+    
     @commands.command(pass_context = True)
     async def movebot(self, ctx):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
@@ -167,18 +167,9 @@ class Utils(commands.Cog):
             voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
             if voice and voice.is_connected(): await voice.move_to(channel)
             else: voice = await channel.connect()
-        
-    @commands.command(pass_context = True)
-    async def total(self, ctx):
-        role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
-        if 'Admin' in role or 'Security' in role:
-            total = 0
-            for channel in ctx.message.author.guild.voice_channels:
-                total += len(channel.members)
-            await ctx.send(total)
 
     @commands.command(pass_context = True)
-    async def find(self, ctx, member: discord.Member = None):
+    async def joined_at(self, ctx, member: discord.Member = None):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
             await ctx.send(member.joined_at)
