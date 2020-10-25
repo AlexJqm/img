@@ -56,7 +56,6 @@ class Utils(commands.Cog):
         voice = self.bot.get_channel(769619638010773524)
         for member in self.bot.get_all_members():
             count += 1
-        print(count)
         await voice.edit(name = f'Membre: {count}')
 
                   
