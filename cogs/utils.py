@@ -144,19 +144,25 @@ class Utils(commands.Cog):
         await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
-            channel = ctx.message.author.voice.channel
-            voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
-            if voice and voice.is_connected(): await voice.move_to(channel)
-            else: voice = await channel.connect()
+            try:
+                channel = discord.utils.get(ctx.guild.channels, name = ctx.message.author.voice.channel.name)
+                await member.edit(voice_channel = channel)
+            except:
+                await ctx.send("Le joueur n'est pas connecté dans un salon vocal.")
     
     @commands.command(pass_context = True)
-    async def go(self, ctx, channel_name = None):
+    async def join(self, ctx, *args):
         await ctx.channel.purge(limit = 1)
+        channel_name = " ".join(args)
+        print(channel_name)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin" or role.name == "Security"]
         if 'Admin' in role or 'Security' in role:
-            channel = discord.utils.get(ctx.guild.channels, name = channel_name.capitalize())
-            await ctx.edit(voice_channel = channel)
-    
+            try:
+                channel = discord.utils.get(ctx.guild.channels, name = str(channel_name).capitalize())
+                print(channel.name)
+                await ctx.message.author.edit(voice_channel = channel)
+            except:
+                await ctx.send("Le serveur vocal n'a pas été trouvé ou vous n'êtes pas dans un salon vocal pour vous déplacer.")
     
     @commands.command(pass_context = True)
     async def movebot(self, ctx):
