@@ -25,13 +25,7 @@ async def on_ready():
         voice = bot.get_channel(769619638010773524)
         for member in bot.get_all_members():
             count += 1
-        count2 = 0
-        try:
-            data = servers.find({})
-            for i in data:
-                count2 = len(i['current_players'])
-        except: count2 = 0
-        await voice.edit(name = f'ℹ️ Total: {count} / En jeu: {count2}')
+        await bot.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = f"{count} membres"))
         await asyncio.sleep(60)
 
 
