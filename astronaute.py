@@ -16,7 +16,7 @@ for file in os.listdir("cogs"):
         name = file[:-3]
         bot.load_extension(f"cogs.{name}")
 
-print("Bot launched")
+print("Serveur ON")
 
 @bot.event
 async def on_ready():
