@@ -15,12 +15,6 @@ for file in os.listdir("cogs"):
     if file.endswith(".py"):
         name = file[:-3]
         bot.load_extension(f"cogs.{name}")
-        
-for file in os.listdir("events"):
-    if file.endswith(".py"):
-        name = file[:-3]
-        bot.load_extension(f"events.{name}")
-
 
 print("Serveur ON")
 
@@ -28,7 +22,6 @@ print("Serveur ON")
 async def on_ready():
     while True:
         count = 0
-        voice = bot.get_channel(769619638010773524)
         for member in bot.get_all_members():
             count += 1
         await bot.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = f"{count} membres"))

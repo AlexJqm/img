@@ -1,4 +1,5 @@
 import discord
+import pymongo
 import os
 from discord.ext import commands
 from os.path import join, dirname
