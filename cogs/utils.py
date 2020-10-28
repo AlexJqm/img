@@ -5,7 +5,14 @@ import subprocess
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+        
+    @commands.command(pass_context = True)
+    async def boost(self, ctx):    
+        booster = discord.utils.get(member.guild.roles, name = 'Impostor')
+        for member in member.guild.members:
+            if booster in member.roles and member.name not in name_list:
+                name_list.append(member.name)
+        
     @commands.command(pass_context = True)
     async def clear(self, ctx):
         await ctx.channel.purge(limit = 1)
