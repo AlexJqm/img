@@ -132,9 +132,8 @@ class User(commands.Cog):
         if member is not None:
             try:
                 voice = ctx.message.author.voice.channel
-                print(voice.name)
-                link = await voice.create_invite()
-                await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us Francophone.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0xF73F26))
+                link = await voice.create_invite(max_age = 600)
+                await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us Francophone.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0x26f752))
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"Le joueur {ctx.message.author.mention} a invité {member.mention} à rejoindre le serveur.", color = 0x26f752))
             except:
                 await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous devez être dans un serveur pour inviter une personne.", color = 0xF73F26))
