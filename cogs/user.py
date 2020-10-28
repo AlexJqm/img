@@ -32,12 +32,11 @@ class User(commands.Cog):
         if member is not None:
             try:
                 voice = member.voice.channel
-                print(voice.name)
                 if len(voice.members) < 10:
                     link = await voice.create_invite()
                     await ctx.send(embed = discord.Embed(title = f"👀 Where is...", description = f"Le joueur {member.name} se trouve dans le serveur {voice.name}.\n[Rejoindre {member.name}]({link})", color = 0x26f752))
                 
-                else: await ctx.send(embed = discord.Embed(title = f"👀 Where is...", description = f"Le joueur {member.name} se trouve dans le serveur {voice.name}.\nVous ne pouvez pas le rejoindre.", color = 0xF73F26))
+                else: await ctx.send(embed = discord.Embed(title = f"👀 Where is...", description = f"Le joueur {member.name} se trouve dans le serveur {voice.name}.\nCe serveur est actuellement complet.", color = 0xF73F26))
             
             except: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Le joueur {member.name} n'est dans aucun serveur.", color = 0xF73F26))
         
