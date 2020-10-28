@@ -31,17 +31,13 @@ class User(commands.Cog):
         await ctx.channel.purge(limit = 1)
         if member is not None:
             try:
-                data = servers.find({"current_players":{"$in":[member.name]}})
-                player = {}
-                for i in data: player = i
-                
-                voice = discord.utils.get(member.guild.channels, name = player['voice_name'].capitalize())
-                
+                voice = member.voice.channel
+                print(voice.name)
                 if len(voice.members) < 10:
                     link = await voice.create_invite()
-                    await ctx.send(embed = discord.Embed(title = f"👀 Where is...", description = f"Le joueur {member.name} se trouve dans le serveur {player['voice_name']}.\n[Rejoindre {member.name}]({link})", color = 0x26f752))
+                    await ctx.send(embed = discord.Embed(title = f"👀 Where is...", description = f"Le joueur {member.name} se trouve dans le serveur {voice.name}.\n[Rejoindre {member.name}]({link})", color = 0x26f752))
                 
-                else: await ctx.send(embed = discord.Embed(title = f"👀 Where is...", description = f"Le joueur {member.name} se trouve dans le serveur {player['voice_name']}.\nVous ne pouvez pas le rejoindre.", color = 0xF73F26))
+                else: await ctx.send(embed = discord.Embed(title = f"👀 Where is...", description = f"Le joueur {member.name} se trouve dans le serveur {voice.name}.\nVous ne pouvez pas le rejoindre.", color = 0xF73F26))
             
             except: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Le joueur {member.name} n'est dans aucun serveur.", color = 0xF73F26))
         
@@ -133,25 +129,16 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['inv'])
     async def invite(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        name_list = find_server()
-        find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
-        role = discord.utils.get(member.guild.roles, name = find_role[0])  
-        voice = discord.utils.get(member.guild.channels, name = role.name)
-        data = servers.find({"voice_name": voice.name, "finished": None})
-        server = {}
-        for i in data: server = i
-        if server['private'] == False:
-            if member is not None:
-                try:
-                    role = [role.name for role in ctx.message.author.roles if role.name in name_list]
-                    voice = discord.utils.get(member.guild.channels, name = role[0].capitalize())
-                    link = await voice.create_invite()
-                    await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us Francophone.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0xF73F26))
-                    await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"Le joueur {ctx.message.author.mention} a invité {member.mention} à rejoindre le serveur.", color = 0x26f752))
-                except:
-                    await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous devez être dans un serveur pour inviter une personne.", color = 0xF73F26))
-            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `.invite @pseudo`", color = 0xF73F26))
-        else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous ne pouvez pas inviter un joueur dans un serveur privé.", color = 0xF73F26))
+        if member is not None:
+            try:
+                voice = ctx.message.author.voice.channel
+                print(voice.name)
+                link = await voice.create_invite()
+                await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us Francophone.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0xF73F26))
+                await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"Le joueur {ctx.message.author.mention} a invité {member.mention} à rejoindre le serveur.", color = 0x26f752))
+            except:
+                await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous devez être dans un serveur pour inviter une personne.", color = 0xF73F26))
+        else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `.invite @pseudo`", color = 0xF73F26))
     
     @commands.command(pass_context = True, aliases=['vh'])
     async def votehost(self, ctx, member: discord.Member = None):
