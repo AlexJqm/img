@@ -67,6 +67,27 @@ class User(commands.Cog):
                     players = '\n- '.join(players)
                     link = await voice.create_invite()
                 await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {server['voice_name']}", description = f"Il reste {10 - len(voice.members)} places disponibles sur ce serveur.\n- {players}\n\nCode du serveur: {server['code']}\nRegion du serveur: {server['region']}", color = 0x26f752))
+            elif serv is not None:
+                if serv.capitalize() in name_list:
+                    try:
+                        data = servers.find({"voice_name": serv.capitalize(), "finished": None})
+                        server = {}
+                        for i in data: server = i
+                        voice = discord.utils.get(ctx.message.author.guild.channels, name = server['voice_name'])
+                        players = [member.name for member in voice.members]
+                        players = '\n- '.join(players)
+                        if server['private'] == False:
+                            if len(voice.members) < 10:
+                                link = await voice.create_invite()
+                                await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {server['voice_name']}", description = f"Il reste {10 - len(voice.members)} places disponibles sur ce serveur.\n- {players}\n[Rejoindre le serveur {server['voice_name']}]({link})", color = 0x26f752))
+
+                            else: await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {server['voice_name']}", description = f"Aucune place disponible sur ce serveur.\n- {players}\n", color = 0xF73F26))
+                        else:  await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {server['voice_name']}", description = f"Il reste {10 - len(voice.members)} places disponibles sur ce serveur.\n- {players}\nCe serveur est privé.", color = 0x26f752))
+
+                    except: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Ce serveur n'existe pas actuellement.", color = 0xF73F26)) 
+
+                else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Serveur introuvable.", color = 0xF73F26))
+            else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un serveur: `.info serveur`", color = 0xF73F26))
         except: pass
         try:
             if ctx.message.author.voice is None:
