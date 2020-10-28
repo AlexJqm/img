@@ -10,8 +10,14 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 servers = db_connect("servers")
-server_dict = {'Alfa':'🇦','Bravo':'🇧','Charlie':'🇨','Delta':'🇩','Echo':'🇪','Foxtrot':'🇫','Golf':'🇬','Hotel':'🇭','India':'🇮','Juliett':'🇯','Kilo':'🇰','Lima':'🇱','Mike':'🇲','November':'🇳','Oscar':'🇴','Papa':'🇵','Quebec':'🇶','Romeo':'🇷','Sierra':'🇸','Tango':'🇹','Uniform':'🇺','Victor':'🇻','Whiskey':'🇼','X-ray':'🇽','Yankee':'🇾','Zulu':'🇿'}
 
+def find_server():
+    data = servers.find({})
+    name_list = []
+    for i in data:
+        name_list.append(i['voice_name'])
+    return name_list
+  
 class Host(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -19,12 +25,13 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['k'])
     async def kick(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
         
         if 'Hote' in role:
             if member is not None:
                 if [role.name for role in member.roles if role.name == "Admin" or role.name == "Security"] == []:
-                    find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+                    find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                     role = discord.utils.get(member.guild.roles, name = find_role[0])  
                     voice = discord.utils.get(member.guild.channels, name = role.name)
 
@@ -39,13 +46,14 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['b'])
     async def ban(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
             if member is not None:
                 check = [role.name for role in member.roles if role.name == "Admin" or role.name == "Security"]
                 if check == []:
-                    find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+                    find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                     role = discord.utils.get(member.guild.roles, name = find_role[0])  
                     voice = discord.utils.get(member.guild.channels, name = role.name)
 
@@ -62,10 +70,11 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['pv'])
     async def private(self, ctx):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
-            find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+            find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
             role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
             voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
             data = servers.find({'voice_name': voice.name})
@@ -82,10 +91,11 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['pu'])
     async def public(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
     
         if 'Hote' in role:
-            find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+            find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
             role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
             voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
             data = servers.find({'voice_name': voice.name})
@@ -102,10 +112,11 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['sc'])
     async def setcode(self, ctx, arg = None):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
         if 'Hote' in role:
             if arg is not None:
-                find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+                find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
                 servers.update_one({'voice_name': voice.name}, {"$set": {'code': arg.upper()}})
@@ -115,10 +126,11 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['sr'])
     async def setregion(self, ctx, arg = None):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
         if 'Hote' in role:
             if arg is not None:
-                find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+                find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
                 servers.update_one({'voice_name': voice.name}, {"$set": {'region': arg.upper()}})
@@ -128,12 +140,13 @@ class Host(commands.Cog):
     @commands.command(pass_context = True, aliases=['s'])
     async def sound(self, ctx):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         role = [role.name for role in ctx.message.author.roles if role.name == "Hote"]
         
         if 'Hote' in role:
             msg = await ctx.channel.send(embed = discord.Embed(title = "Controleur de son", description = "🔊 Unmute \n🔇 Mute\n🗑️ Fermer le controleur de son", color = 0xf7f7f7))
             while True:
-                find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+                find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
                 reactmoji = ['🔊', '🔇', '🗑️']

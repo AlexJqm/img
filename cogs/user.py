@@ -1,5 +1,4 @@
 import discord
-import pymongo
 import os
 from discord.ext import commands
 from os.path import join, dirname
@@ -10,12 +9,12 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 servers = db_connect("servers")
-data = servers.find({})
-name_list = []
-for i in data:
-    name_list.append(i['voice_name'])
-print(name_list)
-server_dict = {'Alfa':'🇦','Bravo':'🇧','Charlie':'🇨','Delta':'🇩','Echo':'🇪','Foxtrot':'🇫','Golf':'🇬','Hotel':'🇭','India':'🇮','Juliett':'🇯','Kilo':'🇰','Lima':'🇱','Mike':'🇲','November':'🇳','Oscar':'🇴','Papa':'🇵','Quebec':'🇶','Romeo':'🇷','Sierra':'🇸','Tango':'🇹','Uniform':'🇺','Victor':'🇻','Whiskey':'🇼','X-ray':'🇽','Yankee':'🇾','Zulu':'🇿'}
+def find_server():
+    data = servers.find({})
+    name_list = []
+    for i in data:
+        name_list.append(i['voice_name'])
+    return name_list
 
 class User(commands.Cog):
     def __init__(self, bot):
@@ -30,7 +29,7 @@ class User(commands.Cog):
         await ctx.channel.purge(limit = 1)
         if member is not None:
             try:
-                data = servers.find({"current_players":{"$in":[member.id]}})
+                data = servers.find({"current_players":{"$in":[member.name]}})
                 player = {}
                 for i in data: player = i
                 
@@ -50,15 +49,16 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['i'])
     async def info(self, ctx, serv = None):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         try:
-            if serv is None and ctx.message.author.voice.channel.name in server_dict:
-                find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+            if serv is None and ctx.message.author.voice.channel.name in name_list:
+                find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                 role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
                 voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
                 data = servers.find({"voice_name": voice.name, "finished": None})
                 server = {}
                 for i in data: server = i
-                find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+                find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                 if server['voice_name'] == find_role[0] and serv is None:
                     voice = discord.utils.get(ctx.message.author.guild.channels, name = server['voice_name'])
                     players = [member.name for member in voice.members]
@@ -69,7 +69,7 @@ class User(commands.Cog):
         try:
             if ctx.message.author.voice is None:
                 if serv is not None:
-                    if serv.capitalize() in server_dict:
+                    if serv.capitalize() in name_list:
                         try:
                             data = servers.find({"voice_name": serv.capitalize(), "finished": None})
                             server = {}
@@ -94,8 +94,8 @@ class User(commands.Cog):
     @commands.command(pass_context = True)
     async def host(self, ctx):
         await ctx.channel.purge(limit = 1)
-
-        find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+        name_list = find_server()
+        find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
         if find_role[0] is not None:
             role = discord.utils.get(ctx.message.author.guild.roles, name = find_role[0])  
             voice = discord.utils.get(ctx.message.author.guild.channels, name = role.name)
@@ -110,7 +110,8 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['inv'])
     async def invite(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
-        find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+        name_list = find_server()
+        find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
         role = discord.utils.get(member.guild.roles, name = find_role[0])  
         voice = discord.utils.get(member.guild.channels, name = role.name)
         data = servers.find({"voice_name": voice.name, "finished": None})
@@ -119,7 +120,7 @@ class User(commands.Cog):
         if server['private'] == False:
             if member is not None:
                 try:
-                    role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+                    role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                     voice = discord.utils.get(member.guild.channels, name = role[0].capitalize())
                     link = await voice.create_invite()
                     await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us France.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0xF73F26))
@@ -132,8 +133,9 @@ class User(commands.Cog):
     @commands.command(pass_context = True, aliases=['vh'])
     async def votehost(self, ctx, member: discord.Member = None):
         await ctx.channel.purge(limit = 1)
+        name_list = find_server()
         if member is not None:
-            find_role = [role.name for role in ctx.message.author.roles if role.name in server_dict.keys()]
+            find_role = [role.name for role in ctx.message.author.roles if role.name in name_list]
             role = discord.utils.get(member.guild.roles, name = find_role[0])  
             voice = discord.utils.get(member.guild.channels, name = role.name)
             
