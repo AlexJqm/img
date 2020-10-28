@@ -125,7 +125,7 @@ class User(commands.Cog):
                     role = [role.name for role in ctx.message.author.roles if role.name in name_list]
                     voice = discord.utils.get(member.guild.channels, name = role[0].capitalize())
                     link = await voice.create_invite()
-                    await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us France.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0xF73F26))
+                    await member.send(embed = discord.Embed(title = "✉️ Invitation", description = f"Le joueur {ctx.message.author.mention} vous invite à rejoindre une partie sur Among Us Francophone.\n[Clique ici pour rejoindre le serveur {voice.name}]({link})", color = 0xF73F26))
                     await ctx.send(embed = discord.Embed(title = f"ℹ️ Serveur {voice.name}", description = f"Le joueur {ctx.message.author.mention} a invité {member.mention} à rejoindre le serveur.", color = 0x26f752))
                 except:
                     await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = f"Vous devez être dans un serveur pour inviter une personne.", color = 0xF73F26))
