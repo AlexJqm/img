@@ -7,12 +7,18 @@ class Utils(commands.Cog):
         self.bot = bot
         
     @commands.command(pass_context = True)
-    async def boost(self, ctx):    
-        booster = discord.utils.get(member.guild.roles, name = 'Impostor')
-        for member in member.guild.members:
-            if booster in member.roles and member.name not in name_list:
-                name_list.append(member.name)
-        
+    async def boost(self, ctx):
+        await ctx.channel.purge(limit = 1)
+        role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
+        if 'Admin' in role:
+            name_list = []
+            booster = discord.utils.get(ctx.message.author.guild.roles, name = 'Impostor')
+            for ctx.message.author in ctx.message.author.guild.members:
+                if booster in ctx.message.author.roles and ctx.message.author.name not in name_list:
+                    name_list.append(ctx.message.author.name)
+            tmp = "', '".join(name_list)
+            await ctx.send(f"'{tmp}'")
+
     @commands.command(pass_context = True)
     async def clear(self, ctx):
         await ctx.channel.purge(limit = 1)

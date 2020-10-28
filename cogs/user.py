@@ -10,6 +10,7 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 servers = db_connect("servers")
+
 def find_server():
     data = servers.find({})
     name_list = []
