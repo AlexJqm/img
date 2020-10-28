@@ -18,11 +18,12 @@ class Utils(commands.Cog):
         data = servers.find({"current_players": {"$in": [member.name]}})
         player = {}
         for i in data: player = i
-        voice = discord.utils.get(member.guild.channels, name = player['voice_name'].capitalize())
-        print(voice.name)
+        role = discord.utils.get(member.guild.roles, name = player['voice_name'].capitalize())
+        print(role.name)
 
-        if voice.name != before.channel.name:
-            print('hello')
-
+        if after.channel != None:
+            if role.name != after.channel.name:
+                await member.remove_roles(role)
+        else: await member.remove_roles(role)
 def setup(bot):
     bot.add_cog(Utils(bot))
