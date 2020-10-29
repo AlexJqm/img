@@ -29,4 +29,4 @@ async def on_ready():
 
 
 if __name__ == "__main__":
-    bot.run("NzU2NTE2MDUyNTE0MzczNzM0.X2S-eg.5thR1HK5BJ6OPrFLoTasEFLijJk")
+    bot.run("NzU2NTE2MDUyNTE0MzczNzM0.X2S-eg.5GEkPFXqmZ-YgBJQADywrzxtg1U")
