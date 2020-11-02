@@ -28,11 +28,13 @@ class Utils(commands.Cog):
         if 'Admin' in role:
             for member in self.bot.get_all_members():
                 count += 1
-                url = str(member.avatar_url).replace('webp?size=1024', 'jpg')
-                print(str(member.avatar_url))
-                urllib.request.urlretrieve(str(member.avatar_url), "img/" + str(count) + ".jpg")
+                url = str(member.avatar_url).replace('webp', 'jpg')
+                url = url.replace('gif', 'jpg')
+                name = "img/" + str(count) + ".jpg"
+                print(url, name)
+                urllib.request.urlretrieve(url, name)
                 print("download " + count)
-            
+ 
     @commands.command(pass_context = True)
     async def rules(self, ctx, msgID: int):
         await ctx.channel.purge(limit = 1)
