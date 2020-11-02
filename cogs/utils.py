@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import subprocess
+import urllib.request
 
 class Utils(commands.Cog):
     def __init__(self, bot):
@@ -20,12 +21,18 @@ class Utils(commands.Cog):
             await ctx.send(f"'{tmp}'")
 
     @commands.command(pass_context = True)
-    async def clear(self, ctx):
+    async def getpp(self, ctx):
         await ctx.channel.purge(limit = 1)
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
+        count = 0
         if 'Admin' in role:
-            await ctx.channel.purge()
-
+            for member in self.bot.get_all_members():
+                count += 1
+                url = str(member.avatar_url).replace('webp?size=1024', 'jpg')
+                print(str(member.avatar_url))
+                urllib.request.urlretrieve(str(member.avatar_url), "img/" + str(count) + ".jpg")
+                print("download " + count)
+            
     @commands.command(pass_context = True)
     async def rules(self, ctx, msgID: int):
         await ctx.channel.purge(limit = 1)
