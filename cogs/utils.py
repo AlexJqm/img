@@ -43,7 +43,6 @@ class Utils(commands.Cog):
                     f = open(name,'wb')
                     f.write(response.read())
                     f.close()
-                    print(name)
  
     @commands.command(pass_context = True)
     async def rules(self, ctx, msgID: int):
