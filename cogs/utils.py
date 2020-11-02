@@ -28,12 +28,22 @@ class Utils(commands.Cog):
         if 'Admin' in role:
             for member in self.bot.get_all_members():
                 count += 1
-                url = str(member.avatar_url).replace('webp', 'jpg')
-                url = url.replace('gif', 'jpg')
-                name = "img/" + str(count) + ".jpg"
-                print(url, name)
-                urllib.request.urlretrieve(url, name)
-                print("download " + count)
+                if not str(member.avatar_url).startswith('https://cdn.discordapp.com/embed'):
+                    url = str(member.avatar_url).replace('webp?size=1024', 'jpg')
+                    url = url.replace('gif?size=1024', 'jpg')
+                    name = "img/" + str(count) + ".jpg"
+                    headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+                             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                             'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+                             'Accept-Encoding': 'none',
+                             'Accept-Language': 'en-US,en;q=0.8',
+                             'Connection': 'keep-alive'}
+                    request_ = urllib.request.Request(url, None, headers) #The assembled request
+                    response = urllib.request.urlopen(request_)# store the response
+                    f = open(name,'wb')
+                    f.write(response.read())
+                    f.close()
+                    print(name)
  
     @commands.command(pass_context = True)
     async def rules(self, ctx, msgID: int):
