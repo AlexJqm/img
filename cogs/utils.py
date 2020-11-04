@@ -7,6 +7,13 @@ class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
+        
+    @commands.command(pass_context = True)
+    async def test(self, ctx):
+        msg = await ctx.fetch_message(773248771227516968)
+        for user in msg.reaction.users()
+        print(msg)
+        
     @commands.command(pass_context = True)
     async def boost(self, ctx):
         await ctx.channel.purge(limit = 1)
