@@ -41,7 +41,7 @@ class Host(commands.Cog):
                     else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Le joueur n'est pas dans le serveur.", color = 0xF73F26))
                 else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous ne pouvez pas kick un modérateur.", color = 0xF73F26))
             else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous devez choisir un joueur: `.kick @pseudo`", color = 0xF73F26))
-        else: await ctx.send(embed = discord.Embed(title = "💥 Une erreur s'est produite...", description = "Vous n'êtes pas l'hôte du serveur.", color = 0xF73F26))
+        else: await ctx.send()
 
     @commands.command(pass_context = True, aliases=['b'])
     async def ban(self, ctx, member: discord.Member = None):
