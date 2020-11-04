@@ -6,14 +6,7 @@ import urllib.request
 class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        
-        
-    @commands.command(pass_context = True)
-    async def test(self, ctx):
-        msg = await ctx.fetch_message(773248771227516968)
-        for user in msg.reaction.users()
-        print(msg)
-        
+
     @commands.command(pass_context = True)
     async def boost(self, ctx):
         await ctx.channel.purge(limit = 1)
@@ -33,23 +26,32 @@ class Utils(commands.Cog):
         role = [role.name for role in ctx.message.author.roles if role.name == "Admin"]
         count = 0
         if 'Admin' in role:
+            msg = await ctx.fetch_message(773248771227516968)
+            valid = []
+            for reaction in msg.reactions:
+                async for user in reaction.users():
+                    valid.append(user)
+            print(valid)
             for member in self.bot.get_all_members():
-                count += 1
-                if not str(member.avatar_url).startswith('https://cdn.discordapp.com/embed'):
-                    url = str(member.avatar_url).replace('webp?size=1024', 'jpg')
-                    url = url.replace('gif?size=1024', 'jpg')
-                    name = "img/" + str(count) + ".jpg"
-                    headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
-                             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                             'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-                             'Accept-Encoding': 'none',
-                             'Accept-Language': 'en-US,en;q=0.8',
-                             'Connection': 'keep-alive'}
-                    request_ = urllib.request.Request(url, None, headers) #The assembled request
-                    response = urllib.request.urlopen(request_)# store the response
-                    f = open(name,'wb')
-                    f.write(response.read())
-                    f.close()
+                print(member.name)
+                if member.id in valid:
+                    print(count)
+                    count += 1
+                    if not str(member.avatar_url).startswith('https://cdn.discordapp.com/embed'):
+                        url = str(member.avatar_url).replace('webp?size=1024', 'jpg')
+                        url = url.replace('gif?size=1024', 'jpg')
+                        name = "img/" + str(count) + ".jpg"
+                        headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+                                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                                 'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+                                 'Accept-Encoding': 'none',
+                                 'Accept-Language': 'en-US,en;q=0.8',
+                                 'Connection': 'keep-alive'}
+                        request_ = urllib.request.Request(url, None, headers) #The assembled request
+                        response = urllib.request.urlopen(request_)# store the response
+                        f = open(name,'wb')
+                        f.write(response.read())
+                        f.close()
  
     @commands.command(pass_context = True)
     async def rules(self, ctx, msgID: int):
